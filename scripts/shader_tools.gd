@@ -5,10 +5,10 @@ class_name ShaderTools
 static func create_shader_source(
 	compute = "", fragment = "", vertex = "", tesselation = "", evaluation = ""
 ) -> RDShaderSource:
-	var check_and_get = func(file_name: String) -> String:
+	var check_and_get = func(file_path: String) -> String:
 		var text = ""
-		if (file_name != ""):
-			text = FileTools.get_file_text(file_name)
+		if (file_path != ""):
+			text = FileTools.get_file_text(file_path)
 		return text
 	
 	var shader_source = RDShaderSource.new()
