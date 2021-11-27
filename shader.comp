@@ -3,5 +3,13 @@
 #extension GL_ARB_compute_shader : enable
 #extension GL_ARB_shader_storage_buffer_object : enable
 
+// Global VAR's
+// uvec3 gl_NumWorkGroups;
+// uvec3 gl_WorkGroupSize;
+// uvec3 gl_WorkGroupID;
+// uvec3 gl_LocalInvocationID;
+// uvec3 gl_GlobalInvocationID;
+// uint  gl_LocalInvocationIndex;
+
 void main() {
 }
