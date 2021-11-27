@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8gkvgyymp6dj"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_pucce"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource( "1_pucce" )
+shader_comp = "res://shader.comp"

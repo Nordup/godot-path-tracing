@@ -1,0 +1,33 @@
+[gd_resource type="Environment" load_steps=5 format=3 uid="uid://u1q1ukg5chcv"]
+
+[sub_resource type="Shader" id="Shader_rj0gk"]
+code = "shader_type sky;
+
+uniform sampler2D sky_texture;
+uniform float xr;
+uniform float yr;
+uniform float y;
+
+void sky()
+{
+	vec4 color =  texture(sky_texture, vec2(SKY_COORDS.x + xr, SKY_COORDS.y * y + yr));
+	COLOR = color.rgb;
+	ALPHA = color.a;
+}
+"
+
+[sub_resource type="StreamTexture2D" id="StreamTexture2D_tnmfd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r5y2m"]
+shader = SubResource( "Shader_rj0gk" )
+shader_param/y = 1.0
+shader_param/yr = 0.0
+shader_param/xr = -0.657
+shader_param/sky_texture = SubResource( "StreamTexture2D_tnmfd" )
+
+[sub_resource type="Sky" id="1"]
+sky_material = SubResource( "ShaderMaterial_r5y2m" )
+
+[resource]
+background_mode = 2
+sky = SubResource( "1" )
