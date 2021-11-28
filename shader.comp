@@ -1,13 +1,26 @@
 #version 460 core
 
-#extension GL_ARB_compute_shader : enable
-#extension GL_ARB_shader_storage_buffer_object : enable
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
+// Structs
+struct Sphere
+{
+	vec4 pos;
+	float radius;
+	int color;
+};
 
-// layout(local_size_x = 8, local_size_y = 1, local_size_z = 1) in;
+// Bindings
+layout(set = 0, binding = 0, std430) buffer ColorBuffer
+{
+	uint data[];
+} color_buffer;
 
-// layout(set = 0, binding = 0, rgba8i) out uniform sampler2D image;
+void main()
+{
+	uint idx = gl_GlobalInvocationID.x;
+	uint width = gl_NumWorkGroups.x;
+	uint height = gl_NumWorkGroups.y;
 
-void main() {
-	// color_buffer.data[gl_GlobalInvocationID.x] = gl_GlobalInvocationID.x;
+	color_buffer.data[idx] = idx;
 }
