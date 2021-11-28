@@ -1,45 +1,36 @@
 extends Node3D
+# Tutorial link: https://github.com/godotengine/godot-docs/issues/4834
 
 @export_file var shader_comp
-
+@onready var r_device: RenderingDevice = RenderingServer.create_local_rendering_device()
 
 func _ready():
 	var msec = Time.get_ticks_msec()
-	run_compute()
+	var cp = ComputePipeline.new(r_device, shader_comp)
+	if (not r_device.compute_pipeline_is_valid(cp.rid)):
+		return
+	
+#	compute_list_process(cp)
 	print("Done in " + str(Time.get_ticks_msec() - msec) + "msec")
 
 
-func run_compute():
-#	var r_device = RenderingServer.get_rendering_device()
-	var r_device = RenderingServer.create_local_rendering_device()
-	var c_pipeline_rid = create_compute_pipeline(r_device, shader_comp)
-	# Run compute list once
-	compute_list_process(r_device, c_pipeline_rid)
-
-
-func create_compute_pipeline(r_device: RenderingDevice, shader_comp_path: String) -> RID:
-	var shader_source = ShaderTools.create_shader_source(shader_comp_path)
-	var shader_spirv = r_device.shader_compile_spirv_from_source(shader_source)
-	shader_spirv = ShaderTools.fix_compile_erros(shader_spirv)
-	ShaderTools.print_al_compile_errors(shader_spirv)
-	
-	var shader_rid = r_device.shader_create_from_spirv(shader_spirv)
-	var c_pipeline_rid = r_device.compute_pipeline_create(shader_rid)
-	print("Compute pipeline is valid: " + str(r_device.compute_pipeline_is_valid(c_pipeline_rid)))
-	return c_pipeline_rid
-
-
-func compute_list_process(r_device: RenderingDevice, c_pipeline_rid: RID):
-	var c_list = r_device.compute_list_begin()
-	r_device.compute_list_bind_compute_pipeline(c_list, c_pipeline_rid)
-	
-	# Bind other needed data here
+func compute_list_process(cp: ComputePipeline):
+	# Bind needed data here
+	var image_data = PackedByteArray()
+	var buffer_rid = r_device.storage_buffer_create(image_data.size() * 1)
+	var uniform = RDUniform.new()
+	uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_SAMPLER
+	uniform.binding = 0
+	uniform.add_id(buffer_rid)
+	var u_set_rid = r_device.uniform_set_create([uniform], cp.shader_rid, 0)
 	
 	# Run compute list
-	r_device.compute_list_dispatch(
-		c_list,
-		r_device.LIMIT_MAX_COMPUTE_WORKGROUP_COUNT_X,
-		r_device.LIMIT_MAX_COMPUTE_WORKGROUP_COUNT_Y,
-		r_device.LIMIT_MAX_COMPUTE_WORKGROUP_COUNT_Z
-	)
+	var c_list = r_device.compute_list_begin()
+	r_device.compute_list_bind_compute_pipeline(c_list, cp.rid)
+	r_device.compute_list_bind_uniform_set(c_list, u_set_rid, 0)
+	r_device.compute_list_dispatch(c_list, 2, 1, 1)
 	r_device.compute_list_end()
+#	r_device.compute_list_add_barrier(c_list)
+
+	r_device.submit()
+	r_device.sync()

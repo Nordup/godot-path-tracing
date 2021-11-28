@@ -10,16 +10,22 @@ config_version=4
 
 _global_script_classes=[{
 "base": "Node",
+"class": &"ComputePipeline",
+"language": &"GDScript",
+"path": "res://scripts/compute_pipeline.gd"
+}, {
+"base": "Node",
 "class": &"FileTools",
 "language": &"GDScript",
-"path": "res://scripts/file_tools.gd"
+"path": "res://scripts/tools/file_tools.gd"
 }, {
 "base": "Node",
 "class": &"ShaderTools",
 "language": &"GDScript",
-"path": "res://scripts/shader_tools.gd"
+"path": "res://scripts/tools/shader_tools.gd"
 }]
 _global_script_class_icons={
+"ComputePipeline": "",
 "FileTools": "",
 "ShaderTools": ""
 }
