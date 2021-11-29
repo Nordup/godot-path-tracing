@@ -7,20 +7,21 @@ struct Sphere
 {
 	vec4 pos;
 	float radius;
-	int color;
+	uint color;
 };
 
 // Bindings
 layout(set = 0, binding = 0, std430) buffer ColorBuffer
 {
-	uint data[];
+	vec4 data[];
 } color_buffer;
 
 void main()
 {
 	uint idx = gl_GlobalInvocationID.x;
+	uint idy = gl_GlobalInvocationID.y;
 	uint width = gl_NumWorkGroups.x;
 	uint height = gl_NumWorkGroups.y;
 
-	color_buffer.data[idx] = idx;
+	color_buffer.data[idx + idy * width].rgba = vec4(1, 0, 1, 1);
 }
