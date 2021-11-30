@@ -17,7 +17,7 @@ _global_script_classes=[{
 "base": "Object",
 "class": &"FileTools",
 "language": &"GDScript",
-"path": "res://scripts/common/file_tools.gd"
+"path": "res://scripts/file_tools.gd"
 }, {
 "base": "RefCounted",
 "class": &"RenderingPipeline",

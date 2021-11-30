@@ -1,4 +1,4 @@
-extends Node3D
+extends Node
 
 # Export vars
 @export_file var comp_shader

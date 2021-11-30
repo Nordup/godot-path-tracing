@@ -1,6 +1,6 @@
 [gd_resource type="Environment" load_steps=5 format=3 uid="uid://bcgh0pdqommp8"]
 
-[sub_resource type="Shader" id="Shader_rj0gk"]
+[sub_resource type="Shader" id="Shader_hj76d"]
 code = "shader_type sky;
 
 uniform sampler2D sky_texture;
@@ -16,18 +16,18 @@ void sky()
 }
 "
 
-[sub_resource type="StreamTexture2D" id="StreamTexture2D_tnmfd"]
+[sub_resource type="StreamTexture2D" id="StreamTexture2D_x415j"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r5y2m"]
-shader = SubResource( "Shader_rj0gk" )
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pmeqe"]
+shader = SubResource( "Shader_hj76d" )
 shader_param/y = 1.0
 shader_param/yr = 0.0
 shader_param/xr = -0.657
-shader_param/sky_texture = SubResource( "StreamTexture2D_tnmfd" )
+shader_param/sky_texture = SubResource( "StreamTexture2D_x415j" )
 
-[sub_resource type="Sky" id="1"]
-sky_material = SubResource( "ShaderMaterial_r5y2m" )
+[sub_resource type="Sky" id="Sky_7xdod"]
+sky_material = SubResource( "ShaderMaterial_pmeqe" )
 
 [resource]
 background_mode = 2
-sky = SubResource( "1" )
+sky = SubResource( "Sky_7xdod" )
