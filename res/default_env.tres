@@ -1,4 +1,4 @@
-[gd_resource type="Environment" load_steps=5 format=3 uid="uid://u1q1ukg5chcv"]
+[gd_resource type="Environment" load_steps=5 format=3 uid="uid://bcgh0pdqommp8"]
 
 [sub_resource type="Shader" id="Shader_rj0gk"]
 code = "shader_type sky;

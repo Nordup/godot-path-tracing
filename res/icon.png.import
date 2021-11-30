@@ -3,8 +3,8 @@
 importer="texture"
 type="StreamTexture2D"
 uid="uid://3x1jokdiem0q"
-path.s3tc="res://.godot/imported/icon.png-487276ed1e3a0c39cad0279d744ee560.s3tc.stex"
-path.etc2="res://.godot/imported/icon.png-487276ed1e3a0c39cad0279d744ee560.etc2.stex"
+path.s3tc="res://.godot/imported/icon.png-740843712ecba34242b12db68f1fa4a9.s3tc.stex"
+path.etc2="res://.godot/imported/icon.png-740843712ecba34242b12db68f1fa4a9.etc2.stex"
 metadata={
 "imported_formats": ["s3tc", "etc2"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://icon.png"
-dest_files=["res://.godot/imported/icon.png-487276ed1e3a0c39cad0279d744ee560.s3tc.stex", "res://.godot/imported/icon.png-487276ed1e3a0c39cad0279d744ee560.etc2.stex"]
+source_file="res://res/icon.png"
+dest_files=["res://.godot/imported/icon.png-740843712ecba34242b12db68f1fa4a9.s3tc.stex", "res://.godot/imported/icon.png-740843712ecba34242b12db68f1fa4a9.etc2.stex"]
 
 [params]
 

@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://bf1hv45pfqefu"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_fydp6"]
+[ext_resource type="Script" path="res://scripts/ui/ui.gd" id="2_45d46"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource( "1_fydp6" )
+comp_shader = "res://shaders/path_tracing_shader.comp"
+texture_holder = NodePath("UI/RenderedImage")
+
+[node name="UI" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( "2_45d46" )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RenderedImage" type="TextureRect" parent="UI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+expand = true
+stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Node" type="Node" parent="."]

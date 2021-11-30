@@ -9,32 +9,38 @@
 config_version=4
 
 _global_script_classes=[{
-"base": "Node",
+"base": "RefCounted",
 "class": &"ComputePipeline",
 "language": &"GDScript",
-"path": "res://scripts/compute_pipeline.gd"
+"path": "res://scripts/rendering/compute_pipeline.gd"
 }, {
-"base": "Node",
+"base": "Object",
 "class": &"FileTools",
 "language": &"GDScript",
-"path": "res://scripts/tools/file_tools.gd"
+"path": "res://scripts/common/file_tools.gd"
 }, {
-"base": "Node",
+"base": "RefCounted",
+"class": &"RenderingPipeline",
+"language": &"GDScript",
+"path": "res://scripts/rendering/rendering_pipeline.gd"
+}, {
+"base": "Object",
 "class": &"ShaderTools",
 "language": &"GDScript",
-"path": "res://scripts/tools/shader_tools.gd"
+"path": "res://scripts/rendering/shader_tools.gd"
 }]
 _global_script_class_icons={
 "ComputePipeline": "",
 "FileTools": "",
+"RenderingPipeline": "",
 "ShaderTools": ""
 }
 
 [application]
 
 config/name="PathTracingTest"
-run/main_scene="res://main.tscn"
-config/icon="res://icon.png"
+run/main_scene="res://scenes/main.tscn"
+config/icon="res://res/icon.png"
 
 [display]
 
@@ -51,4 +57,5 @@ ui_exit={
 [rendering]
 
 driver/threads/thread_model=2
-environment/defaults/default_environment="res://default_env.tres"
+environment/defaults/default_clear_color=Color(0.301961, 0.301961, 0.301961, 1)
+environment/defaults/default_environment="res://res/default_env.tres"
