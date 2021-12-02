@@ -38,7 +38,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="PathTracingTest"
+config/name="PathTracing"
 run/main_scene="res://scenes/main.tscn"
 config/icon="res://res/icon.png"
 

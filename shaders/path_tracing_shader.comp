@@ -23,5 +23,5 @@ void main()
 	uint width = gl_NumWorkGroups.x;
 	uint height = gl_NumWorkGroups.y;
 
-	color_buffer.data[idx + idy * width].rgba = vec4(1, 0, 1, 1);
+	color_buffer.data[idx + idy * width].rgba = vec4(1, 1, 1, 1);
 }

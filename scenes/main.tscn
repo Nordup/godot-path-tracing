@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://c4y706la84uhb"]
+[gd_scene load_steps=3 format=3 uid="uid://cyro8f6kymyeo"]
 
-[ext_resource type="Script" path="res://scripts/render.gd" id="1_fydp6"]
+[ext_resource type="Script" path="res://scripts/path_tracing.gd" id="1_fydp6"]
 [ext_resource type="Script" path="res://scripts/ui.gd" id="2_45d46"]
 
 [node name="Main" type="Node3D"]

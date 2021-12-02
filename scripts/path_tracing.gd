@@ -14,15 +14,16 @@ func _ready():
 		push_error("Compute shader path is not set")
 		return
 	var c_shader = FileTools.get_file_text(comp_shader)
+	var r_pipeline = RenderingPipeline.new(width, height, c_shader)
+#	r_pipeline.set_uniforms([RDUniform.new()])
 	
 	print("Rendering " + str(width) + "x" + str(height))
 	var msec = Time.get_ticks_msec()
-	var r_pipeline = RenderingPipeline.new(width, height, c_shader)
 	var image = r_pipeline.render()
 	print("Done in " + str(Time.get_ticks_msec() - msec) + "msec")
 
 	if image == null:
-		print("Something went wrong! Check for errors")
+		push_warning("Something went wrong! Check for errors")
 		return
 	set_image(image)
 
