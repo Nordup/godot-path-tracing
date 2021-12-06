@@ -6,9 +6,14 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
+config_version=5
 
 _global_script_classes=[{
+"base": "Camera3D",
+"class": &"Camera",
+"language": &"GDScript",
+"path": "res://scripts/objects/camera.gd"
+}, {
 "base": "RefCounted",
 "class": &"ComputePipeline",
 "language": &"GDScript",
@@ -28,12 +33,19 @@ _global_script_classes=[{
 "class": &"ShaderTools",
 "language": &"GDScript",
 "path": "res://scripts/rendering/shader_tools.gd"
+}, {
+"base": "MeshInstance3D",
+"class": &"Sphere",
+"language": &"GDScript",
+"path": "res://scripts/objects/sphere.gd"
 }]
 _global_script_class_icons={
+"Camera": "",
 "ComputePipeline": "",
 "FileTools": "",
 "RenderingPipeline": "",
-"ShaderTools": ""
+"ShaderTools": "",
+"Sphere": ""
 }
 
 [application]
@@ -41,6 +53,11 @@ _global_script_class_icons={
 config/name="PathTracing"
 run/main_scene="res://scenes/main.tscn"
 config/icon="res://res/icon.png"
+config/features=PackedStringArray("4.0")
+
+[autoload]
+
+SceneCollector="*res://scripts/objects/scene_collector.gd"
 
 [display]
 

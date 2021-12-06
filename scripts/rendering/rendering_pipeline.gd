@@ -15,7 +15,7 @@ var uniform_array # Array[RDUniform]
 var uniform_array_set: RID
 
 
-func _init(_width: int, _height: int, c_shader: String):
+func _init(_width: int, _height: int, c_shader: String) -> void:
 	width = _width
 	height = _height
 	r_device = RenderingServer.create_local_rendering_device()
@@ -24,7 +24,7 @@ func _init(_width: int, _height: int, c_shader: String):
 	print("Compute pipeline valid: " + str(r_device.compute_pipeline_is_valid(c_pipeline.rid)))
 
 
-func create_render_buffer():
+func create_render_buffer() -> void:
 	# Buffer
 	var pba = PackedByteArray()
 	var size = width * height * 16		# 4 channels (rgba) 4 bytes each
@@ -41,7 +41,7 @@ func create_render_buffer():
 	rb_unifrom_set = r_device.uniform_set_create([rb_uniform], c_pipeline.shader_rid, 0)
 
 
-func set_uniforms(uniforms):
+func set_uniforms(uniforms) -> void:
 	uniforms = uniforms as Array[RDUniform]
 	if uniforms.size() < 1 or uniforms.find(RDUniform.new()):
 		push_error("Cannot set_uniform: Empty RDUniform array")

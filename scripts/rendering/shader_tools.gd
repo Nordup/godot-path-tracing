@@ -34,7 +34,7 @@ static func fix_compile_erros(shader_source: RDShaderSource, shader_spirv: RDSha
 	return shader_spirv
 
 
-static func print_all_compile_errors(shader_spirv: RDShaderSPIRV):
+static func print_all_compile_errors(shader_spirv: RDShaderSPIRV) -> void:
 	var print_error = func(shader_stage: int):
 		var error_text = shader_spirv.get_stage_compile_error(shader_stage)
 		if (error_text != null && error_text != "" && error_text != "\n"):
