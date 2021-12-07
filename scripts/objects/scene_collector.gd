@@ -22,4 +22,5 @@ func camera_uniform(r_device: RenderingDevice, binding: int) -> RDUniform:
 	return RDUniform.new()
 
 func sphere_buffer_uniform(r_device: RenderingDevice, binding: int) -> Array[RDUniform]:
-	return [RDUniform.new()]
+	var uniforms = [RDUniform.new()]
+	return uniforms

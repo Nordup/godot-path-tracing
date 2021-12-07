@@ -10,6 +10,7 @@ extends Node
 
 
 func _ready() -> void:
+	# await scene initialization
 	await get_tree().create_timer(1).timeout
 	start_path_tracing()
 
@@ -21,6 +22,7 @@ func start_path_tracing() -> void:
 	
 	var c_shader = FileTools.get_file_text(comp_shader)
 	var r_pipeline = RenderingPipeline.new(width, height, c_shader)
+	set_objects_uniforms(r_pipeline)
 	
 	print("Rendering " + str(width) + "x" + str(height))
 	var msec = Time.get_ticks_msec()
@@ -33,7 +35,7 @@ func start_path_tracing() -> void:
 	set_image(image)
 
 
-func set_scene_objects(r_pipeline: RenderingPipeline) -> void:
+func set_objects_uniforms(r_pipeline: RenderingPipeline) -> void:
 	var uniform_array = []
 	var camera_uniform = SceneCollector.camera_uniform(r_pipeline.r_device, 0)
 	var sphere_buffer_uniform = SceneCollector.sphere_buffer_uniform(r_pipeline.r_device, 1)
