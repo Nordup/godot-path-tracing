@@ -43,7 +43,7 @@ func create_render_buffer() -> void:
 
 func set_uniforms(uniforms) -> void:
 	uniforms = uniforms as Array[RDUniform]
-	if uniforms.size() < 1 or uniforms.find(RDUniform.new()):
+	if uniforms.size() < 1:
 		push_error("Cannot set_uniform: Empty RDUniform array")
 		return
 	

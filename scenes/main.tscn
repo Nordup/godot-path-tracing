@@ -1,9 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://cyro8f6kymyeo"]
+[gd_scene load_steps=7 format=3 uid="uid://o7o710ki31ef"]
 
 [ext_resource type="Script" path="res://scripts/path_tracing.gd" id="1_fydp6"]
-[ext_resource type="Script" path="res://scripts/ui.gd" id="2_45d46"]
+[ext_resource type="Script" path="res://scripts/other/ui.gd" id="2_45d46"]
 [ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
 [ext_resource type="Script" path="res://scripts/objects/sphere.gd" id="4_ang4t"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n08nv"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ikc4i"]
+material = SubResource( "StandardMaterial3D_n08nv" )
 
 [node name="Main" type="Node3D"]
 
@@ -36,4 +41,5 @@ transform = Transform3D(0.815162, 0.189015, -0.547526, 0, 0.94526, 0.32632, 0.57
 script = ExtResource( "3_0b2li" )
 
 [node name="Sphere" type="MeshInstance3D" parent="Scene"]
+mesh = SubResource( "SphereMesh_ikc4i" )
 script = ExtResource( "4_ang4t" )
