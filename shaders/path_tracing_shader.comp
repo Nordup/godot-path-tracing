@@ -38,5 +38,5 @@ void main()
 	uint width = gl_NumWorkGroups.x;
 	uint height = gl_NumWorkGroups.y;
 
-	color_buffer.pixel[idx + idy * width].rgba = vec4(idx / width, idy / height, (idx - idy) / height, 1);
+	color_buffer.pixel[idx + idy * width].rgba = sphere_buffer.sphere[0].clr;
 }

@@ -19,6 +19,6 @@ static func get_file_data(file_path: String) -> PackedByteArray:
 	if err != OK:
 		push_error("Cannot open file: " + file_path)
 		return PackedByteArray()
-	var text = file.get_buffer(file.get_length())
+	var data = file.get_buffer(file.get_length())
 	file.close()
-	return text
+	return data

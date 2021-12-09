@@ -1,14 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://o7o710ki31ef"]
+[gd_scene load_steps=7 format=3 uid="uid://cgkleqtx1i4jt"]
 
 [ext_resource type="Script" path="res://scripts/path_tracing.gd" id="1_fydp6"]
 [ext_resource type="Script" path="res://scripts/other/ui.gd" id="2_45d46"]
 [ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
 [ext_resource type="Script" path="res://scripts/objects/sphere.gd" id="4_ang4t"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n08nv"]
+[ext_resource type="Material" uid="uid://c3fuylse6nxhy" path="res://res/sphere.material" id="4_qdt45"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_ikc4i"]
-material = SubResource( "StandardMaterial3D_n08nv" )
+material = ExtResource( "4_qdt45" )
 
 [node name="Main" type="Node3D"]
 
@@ -24,12 +23,26 @@ script = ExtResource( "2_45d46" )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+path_tracing_node = NodePath("../Render")
 
 [node name="RenderedImage" type="TextureRect" parent="UI"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 expand = true
 stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RenderButton" type="Button" parent="UI"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -128.0
+offset_top = 32.0
+offset_right = -32.0
+offset_bottom = 69.0
+theme_override_font_sizes/font_size = 16
+text = "Render"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -43,3 +56,5 @@ script = ExtResource( "3_0b2li" )
 [node name="Sphere" type="MeshInstance3D" parent="Scene"]
 mesh = SubResource( "SphereMesh_ikc4i" )
 script = ExtResource( "4_ang4t" )
+
+[connection signal="button_up" from="UI/RenderButton" to="UI" method="_on_RenderButton_up"]
