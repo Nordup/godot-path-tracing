@@ -53,8 +53,4 @@ void main()
 	uint height = gl_NumWorkGroups.y;
 
 	color_buffer.pixel[idx + idy * width].rgba = sphere_buffer.sphere[0].clr;
-
-	debug_buffer.data[0] = camera.pos.x;
-	debug_buffer.data[1] = camera.pos.y;
-	debug_buffer.data[2] = camera.pos.z;
 }

@@ -62,8 +62,8 @@ func set_image(rgbaf_pba: PackedByteArray) -> void:
 
 
 func print_float_pba(pba: PackedByteArray) -> void:
-	print("\nDEBUG_BUFFER (without 0):")
+	print("\nDebug buffer (without 0):")
 	for i in range(debug_size):
 		var value = pba.decode_float(i * 4)
 		if value != 0: print(value)
-	print("END\n")
+	print("End\n")
