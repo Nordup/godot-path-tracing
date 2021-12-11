@@ -1,7 +1,10 @@
 extends Control
 
 @export_node_path var path_tracing_node
+@export_node_path var button_node
+
 @onready var path_tracing = get_node(path_tracing_node) as PathTracing
+@onready var button = get_node(button_node) as Button
 
 
 func _input(_event) -> void:

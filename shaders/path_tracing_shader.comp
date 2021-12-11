@@ -45,12 +45,18 @@ layout(set = 1, binding = 1, std430) buffer SphereBuffer
 
 // FUNCTIONS
 
+void set()
+{
+
+}
+
 void main()
 {
 	uint idx = gl_GlobalInvocationID.x;
 	uint idy = gl_GlobalInvocationID.y;
 	uint width = gl_NumWorkGroups.x;
 	uint height = gl_NumWorkGroups.y;
-
+	
+	set();
 	color_buffer.pixel[idx + idy * width].rgba = sphere_buffer.sphere[0].clr;
 }

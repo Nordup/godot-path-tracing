@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c17jqepdiuyl8"]
+[gd_scene load_steps=5 format=3 uid="uid://dkmhs3dqliin8"]
 
 [ext_resource type="Script" path="res://scripts/path_tracing.gd" id="1_fydp6"]
 [ext_resource type="Script" path="res://scripts/ui.gd" id="2_45d46"]
@@ -11,6 +11,8 @@
 script = ExtResource( "1_fydp6" )
 comp_shader = "res://shaders/path_tracing_shader.comp"
 texture_holder = NodePath("../UI/RenderedImage")
+debug_size = 100
+debug_mode = true
 
 [node name="UI" type="Control" parent="."]
 anchor_right = 1.0
@@ -20,6 +22,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 path_tracing_node = NodePath("../Render")
+button_node = NodePath("RenderButton")
 
 [node name="RenderedImage" type="TextureRect" parent="UI"]
 anchor_right = 1.0

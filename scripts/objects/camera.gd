@@ -20,7 +20,7 @@ func _ready() -> void:
 
 func get_data() -> PackedByteArray:
 	var pba = PackedByteArray()
-	pba.append_array(EncodingPBA.vec3_to_vec4(camera.pos))
-	pba.append_array(EncodingPBA.vec3_to_vec4(camera.dir))
-	pba.append_array(EncodingPBA.float_to_float(camera.fov))
+	pba.append_array(PBATools.vec3_to_vec4(camera.pos))
+	pba.append_array(PBATools.vec3_to_vec4(camera.dir))
+	pba.append_array(PBATools.float_to_float(camera.fov))
 	return pba

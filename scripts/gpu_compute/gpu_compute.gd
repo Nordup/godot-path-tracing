@@ -26,7 +26,9 @@ func dispatch(uniform_sets):
 	
 	for i in range(uniform_sets.size()):
 		if r_device.uniform_set_is_valid(uniform_sets[i].rid):
-			r_device.compute_list_bind_uniform_set(c_list, uniform_sets[i].rid, uniform_sets[i].index)
+			r_device.compute_list_bind_uniform_set(
+				c_list, uniform_sets[i].rid, uniform_sets[i].index
+			)
 		else:
 			push_error("Uniform_set is not valid. Index: " + str(i))
 			r_device.compute_list_end()

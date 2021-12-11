@@ -5,6 +5,10 @@ class_name PathTracing
 @export_file var comp_shader
 @export_node_path var texture_holder
 
+@export var debug_size: int
+@export var debug_mode: bool
+@export var loop: bool
+
 # Internal vars
 @onready var width = get_viewport().size.x
 @onready var height = get_viewport().size.y
@@ -14,10 +18,9 @@ var img_buffer: SBuffer
 var debug_buffer: SBuffer
 var uset: USet
 
-const debug_size = 100
 
 func _ready() -> void:
-#	await get_tree().create_timer(1).timeout # await scene initialization
+	await get_tree().create_timer(1).timeout # await scene initialization
 	if comp_shader == null:
 		push_error("Compute shader path is not set")
 		return
@@ -25,23 +28,33 @@ func _ready() -> void:
 	var c_shader = FileTools.get_file_text(comp_shader)
 	compute = GPUCompute.new(c_shader, width, height, 1)
 	# create uniform set
-	var size = width * height * 16 # 4 channels (rgba) 4 bytes each
-	img_buffer = SBuffer.new(compute.r_device, size, PackedByteArray(), 0)
-	debug_buffer = SBuffer.new(compute.r_device, debug_size * 4, PackedByteArray(), 1)
+	img_buffer = SBuffer.new(
+		compute.r_device, width * height * 16, # 4 channels (rgba) 4 bytes each
+		PackedByteArray(), 0 # binding
+	)
+	debug_buffer = SBuffer.new(
+		compute.r_device, debug_size * 4,
+		PBATools.pba_filled(debug_size * 4, 0), 1 # binding
+	)
 	uset = USet.new(compute, [img_buffer.uniform, debug_buffer.uniform], 0)
-#	render()
+	loop_render()
+
+
+func loop_render():
+	while loop:
+		render()
 
 
 func render() -> void:
 	if (compute == null): return
 	var msec = Time.get_ticks_msec()
-	print("\nRendering " + str(width) + "x" + str(height))
+	if debug_mode: print("\nRendering " + str(width) + "x" + str(height))
 
 	compute.dispatch([uset, get_objects_uset()])
 	set_image(compute.r_device.buffer_get_data(img_buffer.rid))
 	
-	print("Done in " + str(Time.get_ticks_msec() - msec) + "msec")
-	print_float_pba(compute.r_device.buffer_get_data(debug_buffer.rid))
+	if debug_mode: print("Done in " + str(Time.get_ticks_msec() - msec) + "msec")
+	if debug_mode: print_float_pba(compute.r_device.buffer_get_data(debug_buffer.rid))
 
 
 func get_objects_uset() -> USet:
@@ -65,5 +78,5 @@ func print_float_pba(pba: PackedByteArray) -> void:
 	print("\nDebug buffer (without 0):")
 	for i in range(debug_size):
 		var value = pba.decode_float(i * 4)
-		if value != 0: print(value)
+		if pow(value, 2) > 0.000001 : print(value)
 	print("End\n")

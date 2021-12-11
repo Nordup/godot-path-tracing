@@ -1,4 +1,11 @@
-class_name EncodingPBA
+class_name PBATools
+
+
+static func pba_filled(size: int, value: int) -> PackedByteArray:
+	var pba = PackedByteArray()
+	pba.resize(size)
+	pba.fill(value)
+	return pba
 
 
 static func float_to_float(number: float) -> PackedByteArray:

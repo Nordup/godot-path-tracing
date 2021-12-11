@@ -20,19 +20,19 @@ _global_script_classes=[{
 "path": "res://scripts/gpu_compute/compute_pipeline.gd"
 }, {
 "base": "RefCounted",
-"class": &"EncodingPBA",
-"language": &"GDScript",
-"path": "res://scripts/objects/encoding_pba.gd"
-}, {
-"base": "RefCounted",
 "class": &"FileTools",
 "language": &"GDScript",
-"path": "res://scripts/file_tools.gd"
+"path": "res://scripts/common/file_tools.gd"
 }, {
 "base": "RefCounted",
 "class": &"GPUCompute",
 "language": &"GDScript",
 "path": "res://scripts/gpu_compute/gpu_compute.gd"
+}, {
+"base": "RefCounted",
+"class": &"PBATools",
+"language": &"GDScript",
+"path": "res://scripts/common/pba_tools.gd"
 }, {
 "base": "Node",
 "class": &"PathTracing",
@@ -62,9 +62,9 @@ _global_script_classes=[{
 _global_script_class_icons={
 "Camera": "",
 "ComputePipeline": "",
-"EncodingPBA": "",
 "FileTools": "",
 "GPUCompute": "",
+"PBATools": "",
 "PathTracing": "",
 "SBuffer": "",
 "ShaderTools": "",
