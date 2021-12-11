@@ -1,5 +1,5 @@
 extends RefCounted
-class_name Compute
+class_name GPUCompute
 
 var x_groups: int
 var y_groups: int

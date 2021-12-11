@@ -6,8 +6,8 @@ class CameraStruct:
 	var dir: Vector3
 	var fov: float
 
-
 var camera: CameraStruct
+
 
 func _ready() -> void:
 	SceneCollector.change_camera(self)

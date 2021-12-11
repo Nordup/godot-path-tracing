@@ -6,7 +6,7 @@ var index: int
 var uniform_array # Array[RDUniform]
 
 
-func _init(compute: Compute, uniforms, set_index) -> void:
+func _init(compute: GPUCompute, uniforms, set_index) -> void:
 	uniforms = uniforms as Array[RDUniform]
 	if uniforms.size() < 1:
 		push_error("Cannot create USet: Empty RDUniform array")

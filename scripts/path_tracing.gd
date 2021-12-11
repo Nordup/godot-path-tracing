@@ -9,7 +9,7 @@ class_name PathTracing
 @onready var width = get_viewport().size.x
 @onready var height = get_viewport().size.y
 
-var compute: Compute
+var compute: GPUCompute
 var img_buffer: SBuffer
 var uset: USet
 
@@ -21,7 +21,7 @@ func _ready() -> void:
 		return
 	
 	var c_shader = FileTools.get_file_text(comp_shader)
-	compute = Compute.new(c_shader, width, height, 1)
+	compute = GPUCompute.new(c_shader, width, height, 1)
 	# create uniform set
 	var size = width * height * 16 # 4 channels (rgba) 4 bytes each
 	img_buffer = SBuffer.new(compute.r_device, size, PackedByteArray(), 0)

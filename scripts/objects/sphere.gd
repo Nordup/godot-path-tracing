@@ -6,7 +6,6 @@ class SphereStruct:
 	var clr: Color
 	var r: float
 
-
 var sphere: SphereStruct
 
 
@@ -21,13 +20,13 @@ func _ready() -> void:
 	sphere.clr = material.albedo_color
 
 
-func _exit_tree() -> void:
-	SceneCollector.remove_sphere(self)
-
-
 func get_data() -> PackedByteArray:
 	var pba = PackedByteArray()
 	pba.append_array(EncodingPBA.vec3_to_vec4(sphere.pos))
 	pba.append_array(EncodingPBA.clr_to_vec4(sphere.clr))
 	pba.append_array(EncodingPBA.float_to_float(sphere.r))
 	return pba
+
+
+func _exit_tree() -> void:
+	SceneCollector.remove_sphere(self)

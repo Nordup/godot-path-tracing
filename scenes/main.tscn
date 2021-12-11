@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cgkleqtx1i4jt"]
+[gd_scene load_steps=5 format=3 uid="uid://c17jqepdiuyl8"]
 
 [ext_resource type="Script" path="res://scripts/path_tracing.gd" id="1_fydp6"]
-[ext_resource type="Script" path="res://scripts/other/ui.gd" id="2_45d46"]
+[ext_resource type="Script" path="res://scripts/ui.gd" id="2_45d46"]
 [ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
 [ext_resource type="PackedScene" uid="uid://ctl6noahufu75" path="res://scenes/sphere_object.tscn" id="4_3trrb"]
 
@@ -52,6 +52,6 @@ script = ExtResource( "3_0b2li" )
 [node name="Sphere" parent="Scene" instance=ExtResource( "4_3trrb" )]
 
 [node name="Sphere2" parent="Scene" instance=ExtResource( "4_3trrb" )]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.22005, -0.409031, 0.689695)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00886, 0, -0.829347)
 
 [connection signal="button_up" from="UI/RenderButton" to="UI" method="_on_RenderButton_up"]
