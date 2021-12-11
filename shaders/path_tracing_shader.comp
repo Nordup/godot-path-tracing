@@ -1,9 +1,9 @@
 #version 460 core
-
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 
-// Structs
+// STRUCTS
+
 struct Sphere
 {
 	vec4 pos;
@@ -12,7 +12,23 @@ struct Sphere
 };
 
 
-// Bindings
+
+// OUPUT BUFFERS
+
+layout(set = 0, binding = 0, std430) buffer ColorBuffer
+{
+	vec4 pixel[];
+} color_buffer;
+
+layout(set = 0, binding = 1, std430) buffer DebugBuffer
+{
+	float data[];
+} debug_buffer;
+
+
+
+// INPUT BUFFERS
+
 layout(set = 1, binding = 0, std140) buffer Camera
 {
 	vec4 pos;
@@ -25,11 +41,9 @@ layout(set = 1, binding = 1, std430) buffer SphereBuffer
 	Sphere[] sphere;
 } sphere_buffer;
 
-layout(set = 0, binding = 0, std430) buffer ColorBuffer
-{
-	vec4 pixel[];
-} color_buffer;
 
+
+// FUNCTIONS
 
 void main()
 {
@@ -39,4 +53,8 @@ void main()
 	uint height = gl_NumWorkGroups.y;
 
 	color_buffer.pixel[idx + idy * width].rgba = sphere_buffer.sphere[0].clr;
+
+	debug_buffer.data[0] = camera.pos.x;
+	debug_buffer.data[1] = camera.pos.y;
+	debug_buffer.data[2] = camera.pos.z;
 }

@@ -11,8 +11,10 @@ class_name PathTracing
 
 var compute: GPUCompute
 var img_buffer: SBuffer
+var debug_buffer: SBuffer
 var uset: USet
 
+const debug_size = 100
 
 func _ready() -> void:
 #	await get_tree().create_timer(1).timeout # await scene initialization
@@ -25,7 +27,8 @@ func _ready() -> void:
 	# create uniform set
 	var size = width * height * 16 # 4 channels (rgba) 4 bytes each
 	img_buffer = SBuffer.new(compute.r_device, size, PackedByteArray(), 0)
-	uset = USet.new(compute, [img_buffer.uniform], 0)
+	debug_buffer = SBuffer.new(compute.r_device, debug_size * 4, PackedByteArray(), 1)
+	uset = USet.new(compute, [img_buffer.uniform, debug_buffer.uniform], 0)
 #	render()
 
 
@@ -35,10 +38,10 @@ func render() -> void:
 	print("\nRendering " + str(width) + "x" + str(height))
 
 	compute.dispatch([uset, get_objects_uset()])
-	var rgbaf_pba = compute.r_device.buffer_get_data(img_buffer.rid)
-	set_image(rgbaf_pba)
+	set_image(compute.r_device.buffer_get_data(img_buffer.rid))
 	
 	print("Done in " + str(Time.get_ticks_msec() - msec) + "msec")
+	print_float_pba(compute.r_device.buffer_get_data(debug_buffer.rid))
 
 
 func get_objects_uset() -> USet:
@@ -56,3 +59,11 @@ func set_image(rgbaf_pba: PackedByteArray) -> void:
 	var new_texture = ImageTexture.new()
 	new_texture.create_from_image(image)
 	get_node(texture_holder).texture = new_texture
+
+
+func print_float_pba(pba: PackedByteArray) -> void:
+	print("\nDEBUG_BUFFER (without 0):")
+	for i in range(debug_size):
+		var value = pba.decode_float(i * 4)
+		if value != 0: print(value)
+	print("END\n")
