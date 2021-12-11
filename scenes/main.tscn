@@ -1,13 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://cgkleqtx1i4jt"]
+[gd_scene load_steps=5 format=3 uid="uid://cgkleqtx1i4jt"]
 
 [ext_resource type="Script" path="res://scripts/path_tracing.gd" id="1_fydp6"]
 [ext_resource type="Script" path="res://scripts/other/ui.gd" id="2_45d46"]
 [ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
-[ext_resource type="Script" path="res://scripts/objects/sphere.gd" id="4_ang4t"]
-[ext_resource type="Material" uid="uid://c3fuylse6nxhy" path="res://res/sphere.material" id="4_qdt45"]
-
-[sub_resource type="SphereMesh" id="SphereMesh_ikc4i"]
-material = ExtResource( "4_qdt45" )
+[ext_resource type="PackedScene" uid="uid://ctl6noahufu75" path="res://scenes/sphere_object.tscn" id="4_3trrb"]
 
 [node name="Main" type="Node3D"]
 
@@ -50,11 +46,12 @@ __meta__ = {
 [node name="Scene" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="Scene"]
-transform = Transform3D(0.815162, 0.189015, -0.547526, 0, 0.94526, 0.32632, 0.579233, -0.266003, 0.770539, -5.56298, 3.53852, 6.69082)
+transform = Transform3D(0.610084, 0.215679, -0.762417, 0, 0.96224, 0.272206, 0.792337, -0.166068, 0.587047, -2.93842, 1.57882, 3.72369)
 script = ExtResource( "3_0b2li" )
 
-[node name="Sphere" type="MeshInstance3D" parent="Scene"]
-mesh = SubResource( "SphereMesh_ikc4i" )
-script = ExtResource( "4_ang4t" )
+[node name="Sphere" parent="Scene" instance=ExtResource( "4_3trrb" )]
+
+[node name="Sphere2" parent="Scene" instance=ExtResource( "4_3trrb" )]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.22005, -0.409031, 0.689695)
 
 [connection signal="button_up" from="UI/RenderButton" to="UI" method="_on_RenderButton_up"]

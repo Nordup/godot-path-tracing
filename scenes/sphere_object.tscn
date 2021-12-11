@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://ctl6noahufu75"]
+
+[ext_resource type="Material" uid="uid://c3fuylse6nxhy" path="res://res/sphere.material" id="1_nfsgb"]
+[ext_resource type="Script" path="res://scripts/objects/sphere.gd" id="2_122g4"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ikc4i"]
+material = ExtResource( "1_nfsgb" )
+
+[node name="Sphere" type="MeshInstance3D"]
+mesh = SubResource( "SphereMesh_ikc4i" )
+script = ExtResource( "2_122g4" )

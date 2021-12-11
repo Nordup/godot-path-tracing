@@ -10,4 +10,4 @@ func _input(_event) -> void:
 
 
 func _on_RenderButton_up() -> void:
-	path_tracing.render_to_image()
+	path_tracing.render()
