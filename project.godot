@@ -82,6 +82,7 @@ config/features=PackedStringArray("4.0")
 [autoload]
 
 SceneCollector="*res://scripts/objects/scene_collector.gd"
+DebugTools="*res://scripts/common/debug_tools.gd"
 
 [display]
 

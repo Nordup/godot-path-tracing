@@ -9,10 +9,10 @@
 
 [node name="Render" type="Node" parent="."]
 script = ExtResource( "1_fydp6" )
-comp_shader = "res://shaders/path_tracing_shader.comp"
+comp_shader = "res://shaders/path_tracing.comp"
 texture_holder = NodePath("../UI/RenderedImage")
 debug_size = 100
-debug_mode = true
+debug_mode = 0
 
 [node name="UI" type="Control" parent="."]
 anchor_right = 1.0
