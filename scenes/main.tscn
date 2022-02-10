@@ -11,8 +11,9 @@
 script = ExtResource( "1_fydp6" )
 comp_shader = "res://shaders/path_tracing.comp"
 texture_holder = NodePath("../UI/RenderedImage")
+loop = false
 debug_size = 100
-debug_mode = 0
+debug_mode = 1
 
 [node name="UI" type="Control" parent="."]
 anchor_right = 1.0
@@ -27,7 +28,6 @@ button_node = NodePath("RenderButton")
 [node name="RenderedImage" type="TextureRect" parent="UI"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-expand = true
 stretch_mode = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -49,12 +49,13 @@ __meta__ = {
 [node name="Scene" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="Scene"]
-transform = Transform3D(0.610084, 0.215679, -0.762417, 0, 0.96224, 0.272206, 0.792337, -0.166068, 0.587047, -2.93842, 1.57882, 3.72369)
+top_level = true
 script = ExtResource( "3_0b2li" )
 
 [node name="Sphere" parent="Scene" instance=ExtResource( "4_3trrb" )]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="Sphere2" parent="Scene" instance=ExtResource( "4_3trrb" )]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00886, 0, -0.829347)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -2.5)
 
 [connection signal="button_up" from="UI/RenderButton" to="UI" method="_on_RenderButton_up"]

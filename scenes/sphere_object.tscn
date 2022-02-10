@@ -7,5 +7,7 @@
 material = ExtResource( "1_nfsgb" )
 
 [node name="Sphere" type="MeshInstance3D"]
+top_level = true
 mesh = SubResource( "SphereMesh_ikc4i" )
+surface_material_override/0 = null
 script = ExtResource( "2_122g4" )

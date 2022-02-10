@@ -11,6 +11,9 @@ var sphere: SphereStruct
 
 func _ready() -> void:
 	SceneCollector.add_sphere(self)
+
+
+func update_data() -> void:
 	var sphere_mesh = self.mesh as SphereMesh
 	var material = sphere_mesh.material as StandardMaterial3D
 	
@@ -21,6 +24,7 @@ func _ready() -> void:
 
 
 func get_data() -> PackedByteArray:
+	update_data()
 	var pba = PackedByteArray()
 	pba.append_array(PBATools.vec3_to_vec4(sphere.pos))
 	pba.append_array(PBATools.clr_to_vec4(sphere.clr))

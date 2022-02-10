@@ -32,7 +32,7 @@ layout(set = 0, binding = 1, std430) buffer DebugBuffer
 layout(set = 1, binding = 0, std140) buffer Camera
 {
 	vec4 pos;
-	vec4 dir;
+	vec4 rot;
 	float fov;
 } camera;
 
@@ -42,13 +42,25 @@ layout(set = 1, binding = 1, std430) buffer SphereBuffer
 } sphere_buffer;
 
 
-
 // FUNCTIONS
 
-void set()
+vec4 color(float x, float y)
 {
+	vec4 r1 = vec4(1, 1, 1, 1);
+	vec4 r2 = vec4(0, 1, 1, 1);
+	vec4 r3 = vec4(1, 0, 1, 1);
+	vec4 r4 = vec4(1, 1, 0, 1);
 
+	vec4 res = r1 * (1 - x) * (1 - y) + r2 * x * (1 - y) + r3 * (1 - x) * y + r4 * x * y;
+	return res;
 }
+
+vec4 get_cam_ray(uint idx, uint idy, uint width, uint height)
+{
+	float dA;
+	float dB;
+	return vec4(1);
+}   
 
 void main()
 {
@@ -57,6 +69,15 @@ void main()
 	uint width = gl_NumWorkGroups.x;
 	uint height = gl_NumWorkGroups.y;
 	
-	set();
-	color_buffer.pixel[idx + idy * width].rgba = sphere_buffer.sphere[0].clr;
+	vec4 ray = get_cam_ray(idx, idy, width, height);
+	float dx = float(idx) / width;
+	float dy = float(idy) / height;
+	color_buffer.pixel[idx + idy * width].rgba = color(dx, dy);
+
+	// DEBUG
+
+	// Print camera rotation
+	// debug_buffer.data[0] = camera.rot.x;
+	// debug_buffer.data[1] = camera.rot.y;
+	// debug_buffer.data[2] = camera.rot.z;
 }
