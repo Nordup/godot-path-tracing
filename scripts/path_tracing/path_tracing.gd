@@ -3,16 +3,15 @@ class_name PathTracing
 
 # Export vars
 @export_file var comp_shader
-@export_node_path var texture_holder
-
-@export var loop: bool
 @export var debug_size: int
-@export var debug_mode: DebugTools.DebugMode
+@export var loop: bool
 
 # Internal vars
-@onready var width = get_viewport().size.x
-@onready var height = get_viewport().size.y
+var width
+var height
 
+# Signals
+signal rendered(texure: Texture, render_time: int)
 
 # GPU Compute vars
 var compute: GPUCompute
@@ -21,19 +20,18 @@ var debug_buffer: SBuffer
 var uset: USet
 
 
-func _ready() -> void:
-	DebugTools.set_mode(debug_mode)
-	assert(comp_shader)
-	await get_tree().create_timer(1).timeout # await scene initialization
+func _enter_tree() -> void:
+	width = get_viewport().size.x
+	height = get_viewport().size.y
 	
+	assert(comp_shader)
 	var c_shader = FileTools.get_file_text(comp_shader)
 	compute = GPUCompute.new(c_shader, width, height, 1)
 	create_uset()
-	loop_render()
 
 
 func create_uset() -> void:
-	if compute == null: return
+	assert(compute)
 	img_buffer = SBuffer.new(
 		compute.r_device, width * height * 16, # 4 channels (rgba) 4 bytes each
 		PackedByteArray(), 0 # binding
@@ -45,22 +43,19 @@ func create_uset() -> void:
 	uset = USet.new(compute, [img_buffer.uniform, debug_buffer.uniform], 0)
 
 
-func loop_render() -> void:
-	while loop:
-		render()
+func _process(_delta: float) -> void:
+	if loop: render()
 
 
 func render() -> void:
-	if (compute == null): return
+	assert(compute)
 	var msec = Time.get_ticks_msec()
-	DebugTools.printm("\nRendering " + str(width) + "x" + str(height), 0)
-
-	compute.dispatch([uset, get_objects_uset()])
-	set_image(compute.r_device.buffer_get_data(img_buffer.rid))
 	
-	DebugTools.printm("Done in " + str(Time.get_ticks_msec() - msec) + "msec", 0)
-	DebugTools.printm("\nDebug buffer (without 0):", 1)
-	DebugTools.print_float_pba(compute.r_device.buffer_get_data(debug_buffer.rid), 1)
+	var objects_uset = get_objects_uset()
+	compute.dispatch([uset, objects_uset])
+	var texture = get_texure(compute.r_device.buffer_get_data(img_buffer.rid))
+	
+	rendered.emit(texture, Time.get_ticks_msec() - msec)
 
 
 func get_objects_uset() -> USet:
@@ -71,10 +66,10 @@ func get_objects_uset() -> USet:
 	return USet.new(compute, [cam_buffer.uniform, spheres_buffer.uniform], 1)
 
 
-func set_image(rgbaf_pba: PackedByteArray) -> void:
+func get_texure(rgbaf_pba: PackedByteArray) -> Texture:
 	if rgbaf_pba == null: return
 	var image = Image.new()
 	image.create_from_data(width, height, false, Image.FORMAT_RGBAF, rgbaf_pba)
-	var new_texture = ImageTexture.new()
-	new_texture.create_from_image(image)
-	get_node(texture_holder).texture = new_texture
+	var texture = ImageTexture.new()
+	texture.create_from_image(image)
+	return texture

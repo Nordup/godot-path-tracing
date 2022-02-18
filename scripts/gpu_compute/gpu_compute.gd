@@ -16,7 +16,6 @@ func _init(c_shader: String, x: int, y: int, z: int) -> void:
 	
 	r_device = RenderingServer.create_local_rendering_device()
 	c_pipeline = ComputePipeline.new(r_device, c_shader)
-	print("Compute pipeline valid: " + str(r_device.compute_pipeline_is_valid(c_pipeline.rid)))
 
 
 func dispatch(uniform_sets):

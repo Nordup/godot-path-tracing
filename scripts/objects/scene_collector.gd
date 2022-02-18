@@ -22,7 +22,6 @@ func camera_pba() -> PackedByteArray:
 	if camera == null: return PackedByteArray()
 	return camera.get_data()
 
-
 func spheres_pba() -> PackedByteArray:
 	# Buffer
 	var pba = PackedByteArray()

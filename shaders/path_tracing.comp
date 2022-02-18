@@ -2,6 +2,7 @@
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 
+
 // STRUCTS
 
 struct Sphere
@@ -42,6 +43,7 @@ layout(set = 1, binding = 1, std430) buffer SphereBuffer
 } sphere_buffer;
 
 
+
 // FUNCTIONS
 
 vec4 color(float x, float y)
@@ -60,7 +62,11 @@ vec4 get_cam_ray(uint idx, uint idy, uint width, uint height)
 	float dA;
 	float dB;
 	return vec4(1);
-}   
+}
+
+
+
+// MAIN
 
 void main()
 {

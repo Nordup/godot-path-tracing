@@ -1,19 +1,24 @@
-[gd_scene load_steps=5 format=3 uid="uid://dkmhs3dqliin8"]
+[gd_scene load_steps=7 format=3 uid="uid://by21kjq1rn1bq"]
 
-[ext_resource type="Script" path="res://scripts/path_tracing.gd" id="1_fydp6"]
-[ext_resource type="Script" path="res://scripts/ui.gd" id="2_45d46"]
+[ext_resource type="Script" path="res://scripts/path_tracing/path_tracing.gd" id="1_fydp6"]
+[ext_resource type="Script" path="res://scripts/path_tracing/ui.gd" id="2_45d46"]
+[ext_resource type="Script" path="res://scripts/path_tracing/path_tracing_log.gd" id="2_x6p8m"]
 [ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
 [ext_resource type="PackedScene" uid="uid://ctl6noahufu75" path="res://scenes/sphere_object.tscn" id="4_3trrb"]
 
+[sub_resource type="Environment" id="Environment_ugo1d"]
+
 [node name="Main" type="Node3D"]
 
-[node name="Render" type="Node" parent="."]
+[node name="PathTracing" type="Node" parent="."]
 script = ExtResource( "1_fydp6" )
 comp_shader = "res://shaders/path_tracing.comp"
-texture_holder = NodePath("../UI/RenderedImage")
-loop = false
 debug_size = 100
-debug_mode = 1
+loop = true
+
+[node name="DebugLog" type="Node" parent="PathTracing"]
+script = ExtResource( "2_x6p8m" )
+debug_mode = -1
 
 [node name="UI" type="Control" parent="."]
 anchor_right = 1.0
@@ -22,13 +27,32 @@ script = ExtResource( "2_45d46" )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-path_tracing_node = NodePath("../Render")
-button_node = NodePath("RenderButton")
+path_tracing_node = NodePath("../PathTracing")
 
 [node name="RenderedImage" type="TextureRect" parent="UI"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FpsValueLabel" type="Label" parent="UI"]
+modulate = Color(0.156863, 0.176471, 0.207843, 1)
+offset_left = 168.0
+offset_top = 32.0
+offset_right = 207.998
+offset_bottom = 58.0
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FpsTextLabel" type="Label" parent="UI/FpsValueLabel"]
+offset_left = -142.0
+offset_right = -11.0
+offset_bottom = 26.0
+text = " PathTracing FPS:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -39,7 +63,8 @@ anchor_right = 1.0
 offset_left = -128.0
 offset_top = 32.0
 offset_right = -32.0
-offset_bottom = 69.0
+offset_bottom = 69.0005
+grow_horizontal = 0
 theme_override_font_sizes/font_size = 16
 text = "Render"
 __meta__ = {
@@ -58,4 +83,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 [node name="Sphere2" parent="Scene" instance=ExtResource( "4_3trrb" )]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -2.5)
 
-[connection signal="button_up" from="UI/RenderButton" to="UI" method="_on_RenderButton_up"]
+[node name="Env" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Env"]
+environment = SubResource( "Environment_ugo1d" )
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Env"]
+transform = Transform3D(0.845986, -0.191493, -0.497633, 0.52273, 0.481945, 0.703195, 0.105175, -0.85502, 0.507817, 0, 1.78789, 0)

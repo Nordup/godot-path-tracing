@@ -37,7 +37,7 @@ _global_script_classes=[{
 "base": "Node",
 "class": &"PathTracing",
 "language": &"GDScript",
-"path": "res://scripts/path_tracing.gd"
+"path": "res://scripts/path_tracing/path_tracing.gd"
 }, {
 "base": "RefCounted",
 "class": &"SBuffer",
