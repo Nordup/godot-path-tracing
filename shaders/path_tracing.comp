@@ -1,9 +1,13 @@
 #version 460 core
+
+
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 
 
-// STRUCTS
+
+/* ====================== STRUCTS ====================== */
+
 
 struct Sphere
 {
@@ -14,12 +18,15 @@ struct Sphere
 
 
 
-// OUPUT BUFFERS
+
+/* ====================== OUPUT BUFFERS ====================== */
+
 
 layout(set = 0, binding = 0, std430) buffer ColorBuffer
 {
 	vec4 pixel[];
 } color_buffer;
+
 
 layout(set = 0, binding = 1, std430) buffer DebugBuffer
 {
@@ -28,7 +35,9 @@ layout(set = 0, binding = 1, std430) buffer DebugBuffer
 
 
 
-// INPUT BUFFERS
+
+/* ====================== INPUT BUFFERS ====================== */
+
 
 layout(set = 1, binding = 0, std140) buffer Camera
 {
@@ -37,6 +46,7 @@ layout(set = 1, binding = 0, std140) buffer Camera
 	float fov;
 } camera;
 
+
 layout(set = 1, binding = 1, std430) buffer SphereBuffer
 {
 	Sphere[] sphere;
@@ -44,25 +54,38 @@ layout(set = 1, binding = 1, std430) buffer SphereBuffer
 
 
 
-// CONST
+
+/* ====================== GLOBAL CONSTS ====================== */
+
 
 uint width = gl_NumWorkGroups.x;
 uint height = gl_NumWorkGroups.y;
 
 
 
-// FUNCTIONS
+
+/* ====================== FUNCTIONS ====================== */
+
+
+// Debug
 
 int printI = 0;
+
 void print(float a)
 {
 	debug_buffer.data[printI] = a;
 	printI++;
 }
+
+
 void printAt(float a, int index)
 {
 	debug_buffer.data[index] = a;
 }
+
+
+
+// Main
 
 vec4 color(float x, float y)
 {
@@ -74,6 +97,7 @@ vec4 color(float x, float y)
 	vec4 res = r1 * (1 - x) * (1 - y) + r2 * x * (1 - y) + r3 * (1 - x) * y + r4 * x * y;
 	return res;
 }
+
 
 vec4 get_cam_ray(uint idx, uint idy)
 {
@@ -90,12 +114,21 @@ vec4 get_cam_ray(uint idx, uint idy)
 		camZ,
 		0
 	);
-	return baseRay;
+
+	float x = radians(camera.rot.x);
+	float y = radians(camera.rot.z);
+	float z = radians(camera.rot.z);
+	mat4 rotMat = mat4(
+		vec4(cos(y) * cos(z),	sin(x) * sin(y) * cos(z) - cos(x) * sin(z),		cos(x) * sin(y) * cos(z) + sin(x) * sin(z),		0),
+		vec4(cos(y) * sin(z),	sin(x) * sin(y) * sin(z) + cos(x) * cos(z),		cos(x) * sin(y) * sin(z) - sin(x) * cos(z),		0),
+		vec4(-sin(y),			sin(x) * cos(y),								cos(x) * cos(y),								0),
+		vec4(0,					0,												0,												1)
+	);
+
+	vec4 ray = rotMat * baseRay;
+	return ray;
 }
 
-
-
-// MAIN
 
 void main()
 {
@@ -108,8 +141,8 @@ void main()
 	color_buffer.pixel[idx + idy * width].rgba = color(dx, dy);
 
 
-	// DEBUG
-	
+	// Debug
+
 	if (idx == 0 && idy == 0){
 		print(ray.x);
 		print(ray.y);
