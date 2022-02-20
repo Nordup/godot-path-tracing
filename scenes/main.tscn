@@ -14,11 +14,11 @@
 script = ExtResource( "1_fydp6" )
 comp_shader = "res://shaders/path_tracing.comp"
 debug_size = 100
-loop = true
+loop = false
 
 [node name="DebugLog" type="Node" parent="PathTracing"]
 script = ExtResource( "2_x6p8m" )
-debug_mode = -1
+debug_mode = 1
 
 [node name="UI" type="Control" parent="."]
 anchor_right = 1.0
@@ -75,6 +75,8 @@ __meta__ = {
 
 [node name="Camera3D" type="Camera3D" parent="Scene"]
 top_level = true
+keep_aspect = 0
+fov = 90.0
 script = ExtResource( "3_0b2li" )
 
 [node name="Sphere" parent="Scene" instance=ExtResource( "4_3trrb" )]

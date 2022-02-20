@@ -44,7 +44,25 @@ layout(set = 1, binding = 1, std430) buffer SphereBuffer
 
 
 
+// CONST
+
+uint width = gl_NumWorkGroups.x;
+uint height = gl_NumWorkGroups.y;
+
+
+
 // FUNCTIONS
+
+int printI = 0;
+void print(float a)
+{
+	debug_buffer.data[printI] = a;
+	printI++;
+}
+void printAt(float a, int index)
+{
+	debug_buffer.data[index] = a;
+}
 
 vec4 color(float x, float y)
 {
@@ -57,11 +75,22 @@ vec4 color(float x, float y)
 	return res;
 }
 
-vec4 get_cam_ray(uint idx, uint idy, uint width, uint height)
+vec4 get_cam_ray(uint idx, uint idy)
 {
-	float dA;
-	float dB;
-	return vec4(1);
+	float fovA = radians(90 - camera.fov / 2); // Angle of between camera and axis
+	float camX = cos(fovA);
+	float camZ = -sin(fovA);
+	float dX = 2 * camX / width;
+	float dY = dX;
+	float camY = (height / 2) * dY;
+
+	vec4 baseRay = vec4(
+		-camX + dX * idx,
+		camY - dY * idy,
+		camZ,
+		0
+	);
+	return baseRay;
 }
 
 
@@ -72,18 +101,19 @@ void main()
 {
 	uint idx = gl_GlobalInvocationID.x;
 	uint idy = gl_GlobalInvocationID.y;
-	uint width = gl_NumWorkGroups.x;
-	uint height = gl_NumWorkGroups.y;
 	
-	vec4 ray = get_cam_ray(idx, idy, width, height);
+	vec4 ray = get_cam_ray(idx, idy);
 	float dx = float(idx) / width;
 	float dy = float(idy) / height;
 	color_buffer.pixel[idx + idy * width].rgba = color(dx, dy);
 
-	// DEBUG
 
-	// Print camera rotation
-	// debug_buffer.data[0] = camera.rot.x;
-	// debug_buffer.data[1] = camera.rot.y;
-	// debug_buffer.data[2] = camera.rot.z;
+	// DEBUG
+	
+	if (idx == 0 && idy == 0){
+		print(ray.x);
+		print(ray.y);
+		print(ray.z);
+		print(ray.w);
+	}
 }
