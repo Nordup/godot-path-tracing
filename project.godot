@@ -84,6 +84,10 @@ config/features=PackedStringArray("4.0")
 SceneCollector="*res://scripts/objects/scene_collector.gd"
 DebugTools="*res://scripts/common/debug_tools.gd"
 
+[debug]
+
+gdscript/warnings/integer_division=false
+
 [display]
 
 window/size/resizable=false

@@ -149,31 +149,17 @@ vec4 get_cam_ray(uint idx, uint idy)
 }
 
 
-vec4 color(float x, float y)
-{
-	vec4 r1 = vec4(1, 1, 1, 1);
-	vec4 r2 = vec4(0, 1, 1, 1);
-	vec4 r3 = vec4(1, 0, 1, 1);
-	vec4 r4 = vec4(1, 1, 0, 1);
-
-	vec4 res = r1 * (1 - x) * (1 - y) + r2 * x * (1 - y) + r3 * (1 - x) * y + r4 * x * y;
-	return res;
-}
-
-
 void main()
 {
 	vec4 ray = get_cam_ray(idx, idy);
-	float dx = float(idx) / width;
-	float dy = float(idy) / height;
-	color_buffer.pixel[idx + idy * width].rgba = color(dx, dy);
+	color_buffer.pixel[idx + idy * width] = ray;
 
 
 	// Debug
 
 	if (idx == 0 && idy == 0)
 	{
-		print_vec4(ray);
 		// print_vec4(camera.rot);
+		// print_vec4(ray);
 	}
 }
