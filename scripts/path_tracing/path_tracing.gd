@@ -59,7 +59,7 @@ func render() -> void:
 
 
 func get_objects_uset() -> USet:
-	var cam_pba = SceneCollector.camera.get_data()
+	var cam_pba = SceneCollector.camera_pba()
 	var cam_buffer = SBuffer.new(compute.r_device, cam_pba.size(), cam_pba, 0)
 	var spheres_pba = SceneCollector.spheres_pba()
 	var spheres_buffer = SBuffer.new(compute.r_device, spheres_pba.size(), spheres_pba, 1)

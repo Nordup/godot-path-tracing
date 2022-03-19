@@ -77,7 +77,7 @@ __meta__ = {
 [node name="Scene" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="Scene"]
-transform = Transform3D(0.651529, -0.48058, -0.586986, 0, 0.773752, -0.633489, 0.758623, 0.412737, 0.504122, 0, 0, 0)
+transform = Transform3D(0.651529, -0.48058, -0.586986, -1.49012e-08, 0.773752, -0.633489, 0.758623, 0.412737, 0.504122, 0, 0, 0)
 top_level = true
 keep_aspect = 0
 fov = 1.0
