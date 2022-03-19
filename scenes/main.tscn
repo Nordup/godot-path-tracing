@@ -1,10 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://by21kjq1rn1bq"]
+[gd_scene load_steps=8 format=3 uid="uid://by21kjq1rn1bq"]
 
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing.gd" id="1_fydp6"]
 [ext_resource type="Script" path="res://scripts/path_tracing/ui.gd" id="2_45d46"]
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing_log.gd" id="2_x6p8m"]
 [ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
 [ext_resource type="PackedScene" uid="uid://ctl6noahufu75" path="res://scenes/sphere_object.tscn" id="4_3trrb"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_q0vjq"]
+radius = 0.01
+height = 0.02
 
 [sub_resource type="Environment" id="Environment_ugo1d"]
 
@@ -14,7 +18,6 @@
 script = ExtResource( "1_fydp6" )
 comp_shader = "res://shaders/path_tracing.comp"
 debug_size = 100
-loop = false
 
 [node name="DebugLog" type="Node" parent="PathTracing"]
 script = ExtResource( "2_x6p8m" )
@@ -74,11 +77,10 @@ __meta__ = {
 [node name="Scene" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="Scene"]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 0)
-rotation_order = 5
+transform = Transform3D(0.651529, -0.48058, -0.586986, 0, 0.773752, -0.633489, 0.758623, 0.412737, 0.504122, 0, 0, 0)
 top_level = true
 keep_aspect = 0
-fov = 90.0
+fov = 1.0
 script = ExtResource( "3_0b2li" )
 
 [node name="Sphere" parent="Scene" instance=ExtResource( "4_3trrb" )]
@@ -87,10 +89,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 [node name="Sphere2" parent="Scene" instance=ExtResource( "4_3trrb" )]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -2.5)
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.579, 0.637, -0.509)
+mesh = SubResource( "SphereMesh_q0vjq" )
+skeleton = NodePath("")
+
 [node name="Env" type="Node3D" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Env"]
 environment = SubResource( "Environment_ugo1d" )
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Env"]
-transform = Transform3D(0.845986, -0.191493, -0.497633, 0.52273, 0.481945, 0.703195, 0.105175, -0.85502, 0.507817, 0, 1.78789, 0)
+transform = Transform3D(0.845986, -0.191493, -0.497633, 0.52273, 0.481945, 0.703194, 0.105175, -0.85502, 0.507818, 7.30817, 1.78789, 0)

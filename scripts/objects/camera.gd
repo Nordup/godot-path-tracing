@@ -16,7 +16,7 @@ func _ready() -> void:
 func update_data() -> void:
 	camera = CameraStruct.new()
 	camera.pos = self.position
-	camera.rot = Vector3(rad2deg(self.rotation.x), rad2deg(self.rotation.y), rad2deg(self.rotation.z))
+	camera.rot = self.rotation
 	camera.fov = self.fov
 
 

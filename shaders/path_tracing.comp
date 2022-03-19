@@ -58,6 +58,8 @@ layout(set = 1, binding = 1, std430) buffer SphereBuffer
 /* ====================== GLOBAL CONSTS ====================== */
 
 
+uint idx = gl_GlobalInvocationID.x;
+uint idy = gl_GlobalInvocationID.y;
 uint width = gl_NumWorkGroups.x;
 uint height = gl_NumWorkGroups.y;
 
@@ -71,10 +73,20 @@ uint height = gl_NumWorkGroups.y;
 
 int printI = 0;
 
+
 void print(float a)
 {
 	debug_buffer.data[printI] = a;
 	printI++;
+}
+
+
+void print_vec4(vec4 v)
+{
+	print(v.x);
+	print(v.y);
+	print(v.z);
+	print(v.w);
 }
 
 
@@ -86,6 +98,67 @@ void printAt(float a, int index)
 
 
 // Main
+
+mat4 rot_mat_x(float angle)
+{
+	return mat4(
+		vec4(1,	0,			0,				0),
+		vec4(0,	cos(angle), -sin(angle),	0),
+		vec4(0,	sin(angle), cos(angle),		0),
+		vec4(0,	0,			0,				1)
+	);
+}
+
+
+mat4 rot_mat_y(float angle)
+{
+	return mat4(
+		vec4(cos(angle),	0,			sin(angle),	0),
+		vec4(0,				1,			0,			0),
+		vec4(-sin(angle),	0,			cos(angle), 0),
+		vec4(0,				0,			0,			1)
+	);
+}
+
+
+mat4 rot_mat_z(float angle)
+{
+	return mat4(
+		vec4(cos(angle),	-sin(angle),	0, 0),
+		vec4(sin(angle),	cos(angle),		0, 0),
+		vec4(0,				0,				1, 0),
+		vec4(0,				0,				0, 1)
+	);
+}
+
+
+vec4 rotate_vector(vec4 rot, vec4 vec)
+{
+	rot = -rot; // change clockwise
+	return rot_mat_y(rot.y) * rot_mat_x(rot.x) * rot_mat_z(rot.z) * vec;
+}
+
+
+vec4 get_cam_ray(uint idx, uint idy)
+{
+	float fovA = radians(camera.fov / 2);
+	float camX = sin(fovA);
+	float camZ = -cos(fovA);
+	float dX = 2 * camX / width;
+	float dY = dX;
+	float camY = (height / 2) * dY;
+
+	vec4 baseRay = vec4(
+		-camX + dX * idx,
+		camY - dY * idy,
+		camZ,
+		1
+	);
+
+	vec4 ray = rotate_vector(camera.rot, baseRay);
+	return ray;
+}
+
 
 vec4 color(float x, float y)
 {
@@ -99,42 +172,8 @@ vec4 color(float x, float y)
 }
 
 
-vec4 get_cam_ray(uint idx, uint idy)
-{
-	float fovA = radians(90 - camera.fov / 2); // Angle of between camera and axis
-	float camX = cos(fovA);
-	float camZ = -sin(fovA);
-	float dX = 2 * camX / width;
-	float dY = dX;
-	float camY = (height / 2) * dY;
-
-	vec4 baseRay = vec4(
-		-camX + dX * idx,
-		camY - dY * idy,
-		camZ,
-		0
-	);
-
-	float x = radians(camera.rot.x);
-	float y = radians(camera.rot.z);
-	float z = radians(camera.rot.z);
-	mat4 rotMat = mat4(
-		vec4(cos(y) * cos(z),	sin(x) * sin(y) * cos(z) - cos(x) * sin(z),		cos(x) * sin(y) * cos(z) + sin(x) * sin(z),		0),
-		vec4(cos(y) * sin(z),	sin(x) * sin(y) * sin(z) + cos(x) * cos(z),		cos(x) * sin(y) * sin(z) - sin(x) * cos(z),		0),
-		vec4(-sin(y),			sin(x) * cos(y),								cos(x) * cos(y),								0),
-		vec4(0,					0,												0,												1)
-	);
-
-	vec4 ray = rotMat * baseRay;
-	return ray;
-}
-
-
 void main()
 {
-	uint idx = gl_GlobalInvocationID.x;
-	uint idy = gl_GlobalInvocationID.y;
-	
 	vec4 ray = get_cam_ray(idx, idy);
 	float dx = float(idx) / width;
 	float dy = float(idy) / height;
@@ -143,10 +182,9 @@ void main()
 
 	// Debug
 
-	if (idx == 0 && idy == 0){
-		print(ray.x);
-		print(ray.y);
-		print(ray.z);
-		print(ray.w);
+	if (idx == 0 && idy == 0)
+	{
+		print_vec4(ray);
+		// print_vec4(camera.rot);
 	}
 }

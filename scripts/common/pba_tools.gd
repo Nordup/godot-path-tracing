@@ -35,6 +35,16 @@ static func clr_to_vec4(color: Color) -> PackedByteArray:
 	return pba
 
 
+static func quaternion_to_vec4(color: Quaternion) -> PackedByteArray:
+	var pba = PackedByteArray()
+	pba.resize(4 * 4) # 4 float 4 bytes
+	pba.encode_float(0, color.x)
+	pba.encode_float(4, color.y)
+	pba.encode_float(8, color.z)
+	pba.encode_float(12, color.w)
+	return pba
+
+
 static func vec3_from_vec4(pba: PackedByteArray, byte_offset: int) -> Vector3:
 	var vec3 = Vector3()
 	vec3.x = pba.decode_float(byte_offset + 0)

@@ -16,7 +16,7 @@ void sky()
 }
 "
 
-[sub_resource type="StreamTexture2D" id="StreamTexture2D_x415j"]
+[sub_resource type="CompressedTexture2D" id="StreamTexture2D_x415j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pmeqe"]
 shader = SubResource( "Shader_hj76d" )
