@@ -71,28 +71,35 @@ uint height = gl_NumWorkGroups.y;
 
 // Debug
 
-int printI = 0;
+int pIndex = 0;
 
 
-void print(float a)
+void print(float f)
 {
-	debug_buffer.data[printI] = a;
-	printI++;
+	debug_buffer.data[pIndex] = 1;
+	debug_buffer.data[pIndex + 1] = f;
+	pIndex += 2;
 }
 
 
-void print_vec4(vec4 v)
+void print3(vec3 vec)
 {
-	print(v.x);
-	print(v.y);
-	print(v.z);
-	print(v.w);
+	debug_buffer.data[pIndex] = 3;
+	debug_buffer.data[pIndex + 1] = vec.x;
+	debug_buffer.data[pIndex + 2] = vec.y;
+	debug_buffer.data[pIndex + 3] = vec.z;
+	pIndex += 4;
 }
 
 
-void printAt(float a, int index)
+void print4(vec4 vec)
 {
-	debug_buffer.data[index] = a;
+	debug_buffer.data[pIndex] = 4;
+	debug_buffer.data[pIndex + 1] = vec.x;
+	debug_buffer.data[pIndex + 2] = vec.y;
+	debug_buffer.data[pIndex + 3] = vec.z;
+	debug_buffer.data[pIndex + 4] = vec.w;
+	pIndex += 5;
 }
 
 

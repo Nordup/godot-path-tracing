@@ -28,11 +28,22 @@ func printm(value: Variant, mode: DebugMode) -> void:
 	print(value)
 
 
-func print_float_pba_quiet(pba: PackedByteArray) -> void: print_float_pba(pba, DebugMode.Quiet)
-func print_float_pba_full(pba: PackedByteArray) -> void: print_float_pba(pba, DebugMode.Full)
+func print_debug_buffer_quiet(pba: PackedByteArray) -> void: print_debug_buffer(pba, DebugMode.Quiet)
+func print_debug_buffer_full(pba: PackedByteArray) -> void: print_debug_buffer(pba, DebugMode.Full)
 
-func print_float_pba(pba: PackedByteArray, mode: DebugMode) -> void:
+func print_debug_buffer(pba: PackedByteArray, mode: DebugMode) -> void:
 	if not _passes(mode): return
-	for i in range(pba.size() / 4.0):
-		var value = pba.decode_float(i * 4)
-		if pow(value, 2) > 0.000001 : print(value)
+	
+	var i = 0
+	while i < pba.size() / 4.0:
+		var size = pba.decode_float(i * 4) # get number of floats in line
+		if (size == 0): break
+		
+		var text = "";
+		for n in size:
+			var index = i + 1 + n
+			text += str(pba.decode_float(index * 4))
+			text += "\t" if n + 1 < size else ""
+		print(text)
+		
+		i += 1 + size

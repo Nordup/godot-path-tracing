@@ -18,6 +18,6 @@ func _on_rendered(_texture: Texture, render_time: int) -> void:
 	DebugTools.print_quiet("\nRendered in " + str(render_time) + " msec")
 	
 	# Print debug buffer data
-	DebugTools.print_full("Debug buffer (without 0):")
+	DebugTools.print_full("Debug buffer:")
 	var float_pba = path_tracing.compute.r_device.buffer_get_data(path_tracing.debug_buffer.rid)
-	DebugTools.print_float_pba_full(float_pba)
+	DebugTools.print_debug_buffer_full(float_pba)
