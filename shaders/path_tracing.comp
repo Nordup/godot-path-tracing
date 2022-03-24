@@ -48,7 +48,7 @@ layout(set = 0, binding = 1, std430) buffer DebugBuffer
 /* ====================== INPUT BUFFERS ====================== */
 
 
-layout(set = 1, binding = 0, std430) buffer Camera
+layout(set = 1, binding = 0, std140) buffer Camera
 {
 	vec4 pos;
 	vec4 rot;
@@ -56,7 +56,7 @@ layout(set = 1, binding = 0, std430) buffer Camera
 } camera;
 
 
-layout(set = 1, binding = 1, std430) buffer SphereBuffer
+layout(set = 1, binding = 1, std140) buffer SphereBuffer
 {
 	Sphere[] sphere;
 } sphere_buffer;
@@ -97,16 +97,6 @@ void print(float f)
 }
 
 
-void print3(vec3 vec)
-{
-	debug_buffer.data[pIndex] = 3;
-	debug_buffer.data[pIndex + 1] = vec.x;
-	debug_buffer.data[pIndex + 2] = vec.y;
-	debug_buffer.data[pIndex + 3] = vec.z;
-	pIndex += 4;
-}
-
-
 void print4(vec4 vec)
 {
 	debug_buffer.data[pIndex] = 4;
@@ -122,7 +112,7 @@ void print4(vec4 vec)
 // Main
 
 
-vec4 get_cam_ray(uint idx, uint idy)
+Ray get_cam_ray(uint idx, uint idy)
 {
 	float fovA = radians(camera.fov / 2);
 	float camX = sin(fovA);
@@ -140,14 +130,14 @@ vec4 get_cam_ray(uint idx, uint idy)
 	// rotated_vec = vec + 2.0 * cross(cross(vec, quat.xyz) + quat.w * vec, quat.xyz)
 	vec3 rotated = baseRay + 2.0 * cross(cross(baseRay, camera.rot.xyz)
 										+ camera.rot.w * baseRay, camera.rot.xyz);
-	return vec4(rotated, 1);
+	return Ray(camera.pos, vec4(rotated, 1));
 }
 
 
 void main()
 {
-	vec4 ray = get_cam_ray(idx, idy);
-	color_buffer.pixel[idx + idy * width] = ray;
+	Ray ray = get_cam_ray(idx, idy);
+	color_buffer.pixel[idx + idy * width] = ray.dir;
 
 
 	// Debug
