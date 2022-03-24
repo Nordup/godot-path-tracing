@@ -31,6 +31,7 @@ func printm(value: Variant, mode: DebugMode) -> void:
 func print_debug_buffer_quiet(pba: PackedByteArray) -> void: print_debug_buffer(pba, DebugMode.Quiet)
 func print_debug_buffer_full(pba: PackedByteArray) -> void: print_debug_buffer(pba, DebugMode.Full)
 
+# Encoded debug buffer. Ex: 3___1_4____ where _ is some float
 func print_debug_buffer(pba: PackedByteArray, mode: DebugMode) -> void:
 	if not _passes(mode): return
 	
