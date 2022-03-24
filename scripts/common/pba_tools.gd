@@ -36,5 +36,5 @@ static func encode_quat(quat: Quaternion) -> PackedByteArray:
 	return encode_number(quat.x, quat.y, quat.z, quat.w)
 
 
-static func encode_clr(color: Color) -> PackedByteArray:
+static func encode_color(color: Color) -> PackedByteArray:
 	return encode_number(color.r, color.g, color.b, color.a)

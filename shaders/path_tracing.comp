@@ -11,9 +11,11 @@ layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 struct Sphere
 {
-	vec3 pos;
+	float rad;
+	vec4 pos;
 	vec4 clr;
-	float r;
+	vec4 ems; // emission
+	float refl; // reflection type (DIFFuse, SPECular, REFRactive)
 };
 
 
@@ -71,6 +73,12 @@ uint width = gl_NumWorkGroups.x;
 uint height = gl_NumWorkGroups.y;
 
 
+// Reflection type (DIFFuse, SPECular, REFRactive)
+
+const uint DIFF = 0;
+const uint SPEC = 1;
+const uint REFR = 2;
+
 
 
 /* ====================== FUNCTIONS ====================== */
@@ -114,37 +122,6 @@ void print4(vec4 vec)
 // Main
 
 
-vec3 rotate_vector(vec3 vec, vec3 euler)
-{
-	mat4 rmat_x = mat4(
-		vec4(1,	0,				0,				0),
-		vec4(0,	cos(euler.x),	-sin(euler.x),	0),
-		vec4(0,	sin(euler.x),	cos(euler.x),	0),
-		vec4(0,	0,				0,				1)
-	);
-	mat4 rmat_y = mat4(
-		vec4(cos(euler.y),	0,	sin(euler.y),	0),
-		vec4(0,				1,	0,				0),
-		vec4(-sin(euler.y),	0,	cos(euler.y),	0),
-		vec4(0,				0,	0,				1)
-	);
-	mat4 rmat_z = mat4(
-		vec4(cos(euler.z),	-sin(euler.z),	0,	0),
-		vec4(sin(euler.z),	cos(euler.z),	0,	0),
-		vec4(0,				0,				1,	0),
-		vec4(0,				0,				0,	1)
-	);
-	vec4 res = rmat_y * rmat_x * rmat_z * vec4(vec, 1);
-	return res.xyz;
-}
-
-
-vec3 rotate_vector(vec3 vec, vec4 quat)
-{
-	return vec + 2.0 * cross(cross(vec, quat.xyz) + quat.w * vec, quat.xyz);
-}
-
-
 vec3 get_cam_ray(uint idx, uint idy)
 {
 	float fovA = radians(camera.fov / 2);
@@ -159,7 +136,11 @@ vec3 get_cam_ray(uint idx, uint idy)
 		camY - dY * idy,
 		camZ
 	);
-	return rotate_vector(baseRay, camera.rot);
+
+	// rotated_vec = vec + 2.0 * cross(cross(vec, quat.xyz) + quat.w * vec, quat.xyz)
+	vec3 rotated = baseRay + 2.0 * cross(cross(baseRay, camera.rot.xyz)
+										+ camera.rot.w * baseRay, camera.rot.xyz);
+	return rotated;
 }
 
 
@@ -173,16 +154,15 @@ void main()
 
 	if (idx == 0 && idy == 0)
 	{
-		print3(camera.pos);;
-		print4(camera.rot);
-		print(camera.fov);
 		for (int i = 0; i < sphere_buffer.sphere.length(); i++)
 		{
 			Sphere sph = sphere_buffer.sphere[i];
 
-			print3(sph.pos);;
+			print(sph.rad);
+			print4(sph.pos);
 			print4(sph.clr);
-			print(sph.r);
+			print4(sph.ems);
+			print(sph.refl);
 		}
 	}
 }

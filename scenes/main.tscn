@@ -32,9 +32,6 @@ debug_mode = 1
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( "2_45d46" )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 path_tracing_node = NodePath("../PathTracing")
 
 [node name="RenderedImage" type="TextureRect" parent="UI"]
@@ -88,15 +85,27 @@ script = ExtResource( "3_0b2li" )
 
 [node name="Sphere" parent="Scene" instance=ExtResource( "4_3trrb" )]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+radius = 1.0
+color = Color(1, 1, 1, 1)
+emission = Color(0.501961, 0.501961, 0.501961, 1)
+reflection_type = 0
 
 [node name="Sphere2" parent="Scene" instance=ExtResource( "4_3trrb" )]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.0603082, -2.5)
+radius = 2.0
+color = Color(1, 1, 1, 1)
+emission = Color(0.501961, 0.501961, 0.501961, 1)
+reflection_type = 1
 
 [node name="Sphere3" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.259143, 0.0603082, -2.98931)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.259143, -3.35952, -2.98931)
 top_level = true
 mesh = SubResource( "SphereMesh_8wyt5" )
 script = ExtResource( "6_trha7" )
+radius = 3.0
+color = Color(1, 1, 1, 1)
+emission = Color(0.501961, 0.501961, 0.501961, 1)
+reflection_type = 2
 
 [node name="Env" type="Node3D" parent="."]
 
