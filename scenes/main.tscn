@@ -1,10 +1,19 @@
-[gd_scene load_steps=7 format=3 uid="uid://by21kjq1rn1bq"]
+[gd_scene load_steps=10 format=3 uid="uid://by21kjq1rn1bq"]
 
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing.gd" id="1_fydp6"]
 [ext_resource type="Script" path="res://scripts/path_tracing/ui.gd" id="2_45d46"]
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing_log.gd" id="2_x6p8m"]
 [ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
 [ext_resource type="PackedScene" uid="uid://ctl6noahufu75" path="res://scenes/sphere_object.tscn" id="4_3trrb"]
+[ext_resource type="Script" path="res://scripts/objects/sphere.gd" id="6_trha7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3efah"]
+albedo_color = Color(1, 0.411765, 0.462745, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_8wyt5"]
+material = SubResource( "StandardMaterial3D_3efah" )
+radius = 1.366
+height = 2.732
 
 [sub_resource type="Environment" id="Environment_ugo1d"]
 
@@ -81,7 +90,13 @@ script = ExtResource( "3_0b2li" )
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="Sphere2" parent="Scene" instance=ExtResource( "4_3trrb" )]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -2.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.0603082, -2.5)
+
+[node name="Sphere3" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.259143, 0.0603082, -2.98931)
+top_level = true
+mesh = SubResource( "SphereMesh_8wyt5" )
+script = ExtResource( "6_trha7" )
 
 [node name="Env" type="Node3D" parent="."]
 

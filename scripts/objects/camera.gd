@@ -16,14 +16,14 @@ func _ready() -> void:
 func update_data() -> void:
 	camera = CameraStruct.new()
 	camera.pos = self.position
-	camera.rot = self.quaternion.inverse()
+	camera.rot = self.quaternion
 	camera.fov = self.fov
 
 
 func get_data() -> PackedByteArray:
-	update_data()	
+	update_data()
 	var pba = PackedByteArray()
-	pba.append_array(PBATools.vec3_to_vec4(camera.pos))
-	pba.append_array(PBATools.quaternion_to_vec4(camera.rot))
-	pba.append_array(PBATools.float_to_float(camera.fov))
+	pba.append_array(PBATools.encode_vec3(camera.pos))
+	pba.append_array(PBATools.encode_quat(camera.rot))
+	pba.append_array(PBATools.encode_float(camera.fov))
 	return pba

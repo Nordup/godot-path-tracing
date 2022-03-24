@@ -26,9 +26,9 @@ func update_data() -> void:
 func get_data() -> PackedByteArray:
 	update_data()
 	var pba = PackedByteArray()
-	pba.append_array(PBATools.vec3_to_vec4(sphere.pos))
-	pba.append_array(PBATools.clr_to_vec4(sphere.clr))
-	pba.append_array(PBATools.float_to_float(sphere.r))
+	pba.append_array(PBATools.encode_vec3(sphere.pos))
+	pba.append_array(PBATools.encode_clr(sphere.clr))
+	pba.append_array(PBATools.encode_float(sphere.r))
 	return pba
 
 

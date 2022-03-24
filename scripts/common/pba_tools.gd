@@ -8,46 +8,33 @@ static func pba_filled(size: int, value: int) -> PackedByteArray:
 	return pba
 
 
-static func float_to_float(number: float) -> PackedByteArray:
-	var pba = PackedByteArray()
-	pba.resize(4) # 1 float 4 bytes
-	pba.encode_float(0, number)
-	return pba
-
-
-static func vec3_to_vec4(vec3: Vector3) -> PackedByteArray:
+static func encode_number(x: float, y: float, z: float, w: float) -> PackedByteArray:
 	var pba = PackedByteArray()
 	pba.resize(4 * 4) # 4 float 4 bytes
-	pba.encode_float(0, vec3.x)
-	pba.encode_float(4, vec3.y)
-	pba.encode_float(8, vec3.z)
-	pba.encode_float(12, 1)
+	pba.encode_float(0, x)
+	pba.encode_float(4, y)
+	pba.encode_float(8, z)
+	pba.encode_float(12, w)
 	return pba
 
 
-static func clr_to_vec4(color: Color) -> PackedByteArray:
-	var pba = PackedByteArray()
-	pba.resize(4 * 4) # 4 float 4 bytes
-	pba.encode_float(0, color.r)
-	pba.encode_float(4, color.g)
-	pba.encode_float(8, color.b)
-	pba.encode_float(12, color.a)
-	return pba
+static func encode_float(f: float) -> PackedByteArray:
+	return encode_number(f, 0, 0, 0)
 
 
-static func quaternion_to_vec4(color: Quaternion) -> PackedByteArray:
-	var pba = PackedByteArray()
-	pba.resize(4 * 4) # 4 float 4 bytes
-	pba.encode_float(0, color.x)
-	pba.encode_float(4, color.y)
-	pba.encode_float(8, color.z)
-	pba.encode_float(12, color.w)
-	return pba
+static func encode_vec3(vec3: Vector3) -> PackedByteArray:
+	return encode_number(vec3.x, vec3.y, vec3.z, 1)
 
 
-static func vec3_from_vec4(pba: PackedByteArray, byte_offset: int) -> Vector3:
-	var vec3 = Vector3()
-	vec3.x = pba.decode_float(byte_offset + 0)
-	vec3.y = pba.decode_float(byte_offset + 4)
-	vec3.z = pba.decode_float(byte_offset + 8)
-	return vec3
+static func encode_euler(euler: Vector3) -> PackedByteArray:
+	euler = euler.inverse() # godot uses inverse rotation direction
+	return encode_number(euler.x, euler.y, euler.z, 1)
+
+
+static func encode_quat(quat: Quaternion) -> PackedByteArray:
+	quat = quat.inverse() # godot uses inverse rotation direction
+	return encode_number(quat.x, quat.y, quat.z, quat.w)
+
+
+static func encode_clr(color: Color) -> PackedByteArray:
+	return encode_number(color.r, color.g, color.b, color.a)
