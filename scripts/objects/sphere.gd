@@ -2,8 +2,8 @@ extends MeshInstance3D
 class_name Sphere
 
 class SphereStruct:
-	var rad : float
 	var pos: Vector3
+	var rad : float
 	var clr: Color
 	var ems: Color
 	var refl: ReflType
@@ -23,8 +23,8 @@ func _ready() -> void:
 
 func update_data() -> void:
 	sphere = SphereStruct.new()
-	sphere.rad = radius
 	sphere.pos = self.position
+	sphere.rad = radius
 	sphere.clr = color
 	sphere.ems = emission
 	sphere.refl = reflection_type
@@ -33,8 +33,8 @@ func update_data() -> void:
 func get_data() -> PackedByteArray:
 	update_data()
 	var pba = PackedByteArray()
-	pba.append_array(PBATools.encode_float(sphere.rad))
 	pba.append_array(PBATools.encode_vec3(sphere.pos))
+	pba.append_array(PBATools.encode_float(sphere.rad))
 	pba.append_array(PBATools.encode_color(sphere.clr))
 	pba.append_array(PBATools.encode_color(sphere.ems))
 	pba.append_array(PBATools.encode_float(float(sphere.refl)))

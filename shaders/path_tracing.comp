@@ -11,8 +11,8 @@ layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 struct Sphere
 {
-	float rad;
 	vec4 pos;
+	float rad;
 	vec4 clr;
 	vec4 ems; // emission
 	float refl; // reflection type (DIFFuse, SPECular, REFRactive)
@@ -21,8 +21,8 @@ struct Sphere
 
 struct Ray
 {
-	vec3 pos;
-	vec3 dir;
+	vec4 pos;
+	vec4 dir;
 };
 
 
@@ -48,9 +48,9 @@ layout(set = 0, binding = 1, std430) buffer DebugBuffer
 /* ====================== INPUT BUFFERS ====================== */
 
 
-layout(set = 1, binding = 0, std140) buffer Camera
+layout(set = 1, binding = 0, std430) buffer Camera
 {
-	vec3 pos;
+	vec4 pos;
 	vec4 rot;
 	float fov;
 } camera;
@@ -122,7 +122,7 @@ void print4(vec4 vec)
 // Main
 
 
-vec3 get_cam_ray(uint idx, uint idy)
+vec4 get_cam_ray(uint idx, uint idy)
 {
 	float fovA = radians(camera.fov / 2);
 	float camX = sin(fovA);
@@ -140,14 +140,14 @@ vec3 get_cam_ray(uint idx, uint idy)
 	// rotated_vec = vec + 2.0 * cross(cross(vec, quat.xyz) + quat.w * vec, quat.xyz)
 	vec3 rotated = baseRay + 2.0 * cross(cross(baseRay, camera.rot.xyz)
 										+ camera.rot.w * baseRay, camera.rot.xyz);
-	return rotated;
+	return vec4(rotated, 1);
 }
 
 
 void main()
 {
-	vec3 ray = get_cam_ray(idx, idy);
-	color_buffer.pixel[idx + idy * width] = vec4(ray, 1);
+	vec4 ray = get_cam_ray(idx, idy);
+	color_buffer.pixel[idx + idy * width] = ray;
 
 
 	// Debug
@@ -158,8 +158,8 @@ void main()
 		{
 			Sphere sph = sphere_buffer.sphere[i];
 
-			print(sph.rad);
 			print4(sph.pos);
+			print(sph.rad);
 			print4(sph.clr);
 			print4(sph.ems);
 			print(sph.refl);
