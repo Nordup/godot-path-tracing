@@ -48,7 +48,14 @@ layout(set = 0, binding = 1, std430) buffer DebugBuffer
 /* ====================== INPUT BUFFERS ====================== */
 
 
-layout(set = 1, binding = 0, std140) buffer Camera
+layout(set = 1, binding = 0, std430) buffer Globals
+{
+	float Depth;
+	float TicksMsec;
+};
+
+
+layout(set = 2, binding = 0, std430) buffer Camera
 {
 	vec4 pos;
 	vec4 rot;
@@ -56,7 +63,7 @@ layout(set = 1, binding = 0, std140) buffer Camera
 } camera;
 
 
-layout(set = 1, binding = 1, std140) buffer SphereBuffer
+layout(set = 2, binding = 1, std430) buffer SphereBuffer
 {
 	Sphere[] sphere;
 } sphere_buffer;
@@ -116,8 +123,7 @@ void print4(vec4 vec)
 
 // Main
 
-float time = 1; // TODO: get time from cpu
-vec2 seed = vec2(idx, idy) * time;
+vec2 seed = vec2(idx, idy) + TicksMsec / 1000;
 float rand()
 {
 	vec3 p3  = fract(vec3(seed.xyx) * .1031);
@@ -186,7 +192,7 @@ vec3 radiance(Ray ray)
 		float p = max(max(f.x, f.y), f.z); // max refl
 
 		cl = cl + cf * sph.ems.xyz;
-		if (++depth > 5)
+		if (++depth > Depth)
 			if (rand() < p)
 				f = f * (1 / p);
 			else
@@ -306,6 +312,5 @@ void main()
 
 	if (idx == 0 && idy == 0)
 	{
-		
 	}
 }
