@@ -12,8 +12,6 @@ albedo_color = Color(1, 0.411765, 0.462745, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_8wyt5"]
 material = SubResource( "StandardMaterial3D_3efah" )
-radius = 1.366
-height = 2.732
 
 [sub_resource type="Environment" id="Environment_ugo1d"]
 
@@ -84,26 +82,26 @@ keep_aspect = 0
 script = ExtResource( "3_0b2li" )
 
 [node name="Sphere" parent="Scene" instance=ExtResource( "4_3trrb" )]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.370043, 0, -2.99432)
 radius = 1.0
-color = Color(1, 1, 1, 1)
+color = Color(1, 0.45098, 0.509804, 1)
 emission = Color(0.501961, 0.501961, 0.501961, 1)
 reflection_type = 0
 
 [node name="Sphere2" parent="Scene" instance=ExtResource( "4_3trrb" )]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.0603082, -2.5)
-radius = 2.0
-color = Color(1, 1, 1, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.0603082, -3.73499)
+radius = 1.0
+color = Color(0.431373, 0.368627, 1, 1)
 emission = Color(0.501961, 0.501961, 0.501961, 1)
 reflection_type = 1
 
 [node name="Sphere3" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.259143, -3.35952, -2.98931)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.259143, -0.65853, -2.98931)
 top_level = true
 mesh = SubResource( "SphereMesh_8wyt5" )
 script = ExtResource( "6_trha7" )
-radius = 3.0
-color = Color(1, 1, 1, 1)
+radius = 1.0
+color = Color(0.396078, 1, 0.333333, 1)
 emission = Color(0.501961, 0.501961, 0.501961, 1)
 reflection_type = 2
 

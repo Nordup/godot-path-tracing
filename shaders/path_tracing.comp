@@ -75,9 +75,9 @@ uint height = gl_NumWorkGroups.y;
 
 // Reflection type (DIFFuse, SPECular, REFRactive)
 
-const uint DIFF = 0;
-const uint SPEC = 1;
-const uint REFR = 2;
+const float DIFF = 0;
+const float SPEC = 1;
+const float REFR = 2;
 
 
 
@@ -130,29 +130,57 @@ Ray get_cam_ray(uint idx, uint idy)
 	// rotated_vec = vec + 2.0 * cross(cross(vec, quat.xyz) + quat.w * vec, quat.xyz)
 	vec3 rotated = baseRay + 2.0 * cross(cross(baseRay, camera.rot.xyz)
 										+ camera.rot.w * baseRay, camera.rot.xyz);
-	return Ray(camera.pos, vec4(rotated, 1));
+	return Ray(camera.pos, vec4(normalize(rotated), 1));
+}
+
+
+double intersect_sphere(const Ray r, const Sphere s)
+{								// returns distance, 0 if nohit
+	vec4 op = s.pos - r.pos;	// Solve t^2*d.d + 2*t*(o-p).d + (o-p).(o-p)-R^2 = 0
+	double t, eps = 1e-4;
+	double b = dot(op, r.dir);
+	double det = b * b - dot(op, op) + s.rad * s.rad;
+	if (det < 0)
+		return 0;
+	else
+		det = sqrt(det);
+	return (t = b - det) > eps ? t : ((t = b + det) > eps ? t : 0);
+}
+
+
+bool intersect(const Ray r, inout double t, inout int id)
+{
+	double d;
+	double inf = t = 1e20;
+	for (int i = 0; i < sphere_buffer.sphere.length(); i++)
+	{
+		d = intersect_sphere(r, sphere_buffer.sphere[i]);
+		if (d != 0 && d < t)
+		{
+			t = d;
+			id = i;
+		}
+	}
+	return t < inf;
 }
 
 
 void main()
 {
+	double t;
+	int id;
+
 	Ray ray = get_cam_ray(idx, idy);
-	color_buffer.pixel[idx + idy * width] = ray.dir;
+	if (intersect(ray, t, id))
+		color_buffer.pixel[idx + idy * width] = sphere_buffer.sphere[id].clr;
+	else
+		color_buffer.pixel[idx + idy * width] = vec4(0, 0, 0, 1);
 
 
 	// Debug
 
 	if (idx == 0 && idy == 0)
 	{
-		for (int i = 0; i < sphere_buffer.sphere.length(); i++)
-		{
-			Sphere sph = sphere_buffer.sphere[i];
-
-			print4(sph.pos);
-			print(sph.rad);
-			print4(sph.clr);
-			print4(sph.ems);
-			print(sph.refl);
-		}
+		
 	}
 }
