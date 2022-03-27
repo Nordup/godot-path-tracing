@@ -18,7 +18,6 @@ signal rendered(texure: Texture, render_time: int)
 var compute: GPUCompute
 var img_buffer: SBuffer
 var debug_buffer: SBuffer
-var uset: USet
 
 
 func _enter_tree() -> void:
@@ -28,7 +27,6 @@ func _enter_tree() -> void:
 	assert(comp_shader)
 	var c_shader = FileTools.get_file_text(comp_shader)
 	compute = GPUCompute.new(c_shader, width, height, 1)
-	create_uset()
 
 
 func _process(_delta: float) -> void:
@@ -39,6 +37,7 @@ func render() -> void:
 	assert(compute)
 	var msec = Time.get_ticks_msec()
 	
+	var uset = create_uset()
 	var glbs_uset = get_globals_uset()
 	var objects_uset = get_objects_uset()
 	compute.dispatch([uset, glbs_uset, objects_uset])
@@ -47,8 +46,7 @@ func render() -> void:
 	rendered.emit(texture, Time.get_ticks_msec() - msec)
 
 
-func create_uset() -> void:
-	assert(compute)
+func create_uset() -> USet:
 	img_buffer = SBuffer.new(
 		compute.r_device, width * height * 16, # 4 channels (rgba) 4 bytes each
 		PackedByteArray(), 0 # binding
@@ -57,7 +55,7 @@ func create_uset() -> void:
 		compute.r_device, debug_size * 4,
 		PBATools.pba_filled(debug_size * 4, 0), 1 # binding
 	)
-	uset = USet.new(compute, [img_buffer.uniform,debug_buffer.uniform], 0)
+	return USet.new(compute, [img_buffer.uniform,debug_buffer.uniform], 0)
 
 
 func get_globals_uset() -> USet:

@@ -177,10 +177,9 @@ vec3 radiance(Ray ray)
 	vec3 cl = vec3(0); // accumulated color
 	vec3 cf = vec3(1); // accumulated reflectance
 
-	int i = 0;
-	while (i < 10)
+	int unroll = int(Depth) * 5;
+	while (unroll-- > 0)
 	{
-		i++;
 		if (!intersect(ray, t, id))
 			return cl;
 		const Sphere sph = sphere_buffer.sphere[id];
@@ -273,7 +272,6 @@ vec3 radiance(Ray ray)
 						//						radiance(Ray(hit,tdir),depth,Xi)*TP;
 		}
 	}
-	return vec3(0);
 }
 
 

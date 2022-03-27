@@ -1,10 +1,12 @@
-[gd_scene load_steps=25 format=3 uid="uid://by21kjq1rn1bq"]
+[gd_scene load_steps=26 format=3 uid="uid://by21kjq1rn1bq"]
 
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing.gd" id="1_fydp6"]
 [ext_resource type="Script" path="res://scripts/path_tracing/ui.gd" id="2_45d46"]
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing_log.gd" id="2_x6p8m"]
 [ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
 [ext_resource type="Script" path="res://scripts/objects/sphere.gd" id="6_trha7"]
+
+[sub_resource type="Theme" id="Theme_atioi"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ds1bn"]
 albedo_color = Color(0.188235, 0.176471, 0.741176, 1)
@@ -13,6 +15,8 @@ emission_energy = 3.39
 
 [sub_resource type="SphereMesh" id="SphereMesh_st7ul"]
 material = SubResource( "StandardMaterial3D_ds1bn" )
+radial_segments = 100
+rings = 600
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pbejf"]
 albedo_color = Color(0.772549, 0.231373, 0.266667, 1)
@@ -21,6 +25,8 @@ emission_energy = 3.39
 
 [sub_resource type="SphereMesh" id="SphereMesh_2bwro"]
 material = SubResource( "StandardMaterial3D_pbejf" )
+radial_segments = 100
+rings = 600
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s4ryd"]
 albedo_color = Color(0.784314, 0.776471, 0.784314, 1)
@@ -29,9 +35,11 @@ emission_energy = 3.39
 
 [sub_resource type="SphereMesh" id="SphereMesh_i3o4h"]
 material = SubResource( "StandardMaterial3D_s4ryd" )
+radial_segments = 100
+rings = 600
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_25jde"]
-albedo_color = Color(0.784314, 0.776471, 0.784314, 1)
+albedo_color = Color(0, 0, 0, 1)
 emission = Color(0.564706, 0.305882, 0.407843, 1)
 emission_energy = 3.39
 
@@ -92,6 +100,7 @@ ambient_light_sky_contribution = 0.0
 script = ExtResource( "1_fydp6" )
 comp_shader = "res://shaders/path_tracing.comp"
 debug_size = 100
+loop = true
 
 [node name="DebugLog" type="Node" parent="PathTracing"]
 script = ExtResource( "2_x6p8m" )
@@ -107,28 +116,36 @@ path_tracing_node = NodePath("../PathTracing")
 anchor_right = 1.0
 anchor_bottom = 1.0
 stretch_mode = 1
+
+[node name="Panel" type="Panel" parent="UI"]
+offset_left = 20.0
+offset_top = 32.0
+offset_right = 208.0
+offset_bottom = 58.0
 __meta__ = {
-"_edit_use_anchors_": false
+"_edit_layout_mode": 0,
+"_edit_use_custom_anchors": false
 }
 
 [node name="FpsValueLabel" type="Label" parent="UI"]
-modulate = Color(0.156863, 0.176471, 0.207843, 1)
 offset_left = 168.0
 offset_top = 32.0
 offset_right = 207.998
 offset_bottom = 58.0
 text = "0"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="FpsTextLabel" type="Label" parent="UI/FpsValueLabel"]
 offset_left = -142.0
-offset_right = -11.0
+offset_right = -9.0
 offset_bottom = 26.0
+theme = SubResource( "Theme_atioi" )
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
 text = " PathTracing FPS:"
 __meta__ = {
-"_edit_use_anchors_": false
+"_edit_layout_mode": 0,
+"_edit_use_custom_anchors": false
 }
 
 [node name="RenderButton" type="Button" parent="UI"]
@@ -150,12 +167,11 @@ __meta__ = {
 [node name="Camera3D" type="Camera3D" parent="Scene"]
 transform = Transform3D(0.99905, -0.00591073, 0.043174, 0, 0.990758, 0.13564, -0.0435767, -0.135511, 0.989817, 0.347612, 2.55536, 7.38275)
 top_level = true
-visible = false
 keep_aspect = 0
 script = ExtResource( "3_0b2li" )
 
 [node name="Right" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, 99890, 0, 0)
+transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, 100003, 0, 0)
 top_level = true
 mesh = SubResource( "SphereMesh_st7ul" )
 script = ExtResource( "6_trha7" )
@@ -164,7 +180,7 @@ color = Color(0.188235, 0.176471, 0.741176, 1)
 reflection_type = 0
 
 [node name="Left" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, -99890, 0, 0)
+transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, -100003, 0, 0)
 top_level = true
 mesh = SubResource( "SphereMesh_2bwro" )
 script = ExtResource( "6_trha7" )
@@ -173,7 +189,7 @@ color = Color(0.772549, 0.231373, 0.266667, 1)
 reflection_type = 0
 
 [node name="Front" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, 0, 0, -99890)
+transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, 0, 0, -100003)
 top_level = true
 mesh = SubResource( "SphereMesh_i3o4h" )
 script = ExtResource( "6_trha7" )
@@ -187,7 +203,6 @@ top_level = true
 mesh = SubResource( "SphereMesh_i0jfn" )
 script = ExtResource( "6_trha7" )
 radius = 100000.0
-color = Color(0.784314, 0.776471, 0.784314, 1)
 reflection_type = 0
 
 [node name="Botm" type="MeshInstance3D" parent="Scene"]
