@@ -171,8 +171,10 @@ vec3 radiance(Ray ray)
 	vec3 cl = vec3(0); // accumulated color
 	vec3 cf = vec3(1); // accumulated reflectance
 
-	while (true)
+	int i = 0;
+	while (i < 10)
 	{
+		i++;
 		if (!intersect(ray, t, id))
 			return cl;
 		const Sphere sph = sphere_buffer.sphere[id];
@@ -265,6 +267,7 @@ vec3 radiance(Ray ray)
 						//						radiance(Ray(hit,tdir),depth,Xi)*TP;
 		}
 	}
+	return vec3(0);
 }
 
 
@@ -296,10 +299,7 @@ void main()
 	int id;
 
 	Ray ray = get_cam_ray(idx, idy);
-	if (intersect(ray, t, id))
-		color_buffer.pixel[idx + idy * width] = sphere_buffer.sphere[id].clr;
-	else
-		color_buffer.pixel[idx + idy * width] = vec4(0, 0, 0, 1);
+	color_buffer.pixel[idx + idy * width] = vec4(radiance(ray), 1);
 
 
 	// Debug
