@@ -16,7 +16,7 @@ emission_energy = 3.39
 [sub_resource type="SphereMesh" id="SphereMesh_st7ul"]
 material = SubResource( "StandardMaterial3D_ds1bn" )
 radial_segments = 100
-rings = 600
+rings = 700
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pbejf"]
 albedo_color = Color(0.772549, 0.231373, 0.266667, 1)
@@ -26,7 +26,7 @@ emission_energy = 3.39
 [sub_resource type="SphereMesh" id="SphereMesh_2bwro"]
 material = SubResource( "StandardMaterial3D_pbejf" )
 radial_segments = 100
-rings = 600
+rings = 700
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s4ryd"]
 albedo_color = Color(0.784314, 0.776471, 0.784314, 1)
@@ -45,6 +45,7 @@ emission_energy = 3.39
 
 [sub_resource type="SphereMesh" id="SphereMesh_i0jfn"]
 material = SubResource( "StandardMaterial3D_25jde" )
+rings = 500
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yh3ml"]
 albedo_color = Color(0.784314, 0.776471, 0.784314, 1)
@@ -53,6 +54,7 @@ emission_energy = 3.39
 
 [sub_resource type="SphereMesh" id="SphereMesh_7efqb"]
 material = SubResource( "StandardMaterial3D_yh3ml" )
+rings = 400
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wvm37"]
 albedo_color = Color(0.784314, 0.776471, 0.784314, 1)
@@ -61,6 +63,8 @@ emission_energy = 3.39
 
 [sub_resource type="SphereMesh" id="SphereMesh_y8ks5"]
 material = SubResource( "StandardMaterial3D_wvm37" )
+radial_segments = 50
+rings = 400
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqybl"]
 metallic = 1.0
@@ -71,6 +75,8 @@ emission_energy = 3.39
 
 [sub_resource type="SphereMesh" id="SphereMesh_28jwi"]
 material = SubResource( "StandardMaterial3D_vqybl" )
+radial_segments = 30
+rings = 10
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3d63t"]
 albedo_color = Color(0, 0, 0, 0.184314)
@@ -80,6 +86,8 @@ refraction_enabled = true
 
 [sub_resource type="SphereMesh" id="SphereMesh_fx4ml"]
 material = SubResource( "StandardMaterial3D_3d63t" )
+radial_segments = 30
+rings = 20
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yfv6p"]
 albedo_color = Color(0, 0, 0, 1)
@@ -89,6 +97,8 @@ emission_energy = 12.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_ipv1x"]
 material = SubResource( "StandardMaterial3D_yfv6p" )
+radial_segments = 30
+rings = 100
 
 [sub_resource type="Environment" id="Environment_ugo1d"]
 background_mode = 1
@@ -100,7 +110,6 @@ ambient_light_sky_contribution = 0.0
 script = ExtResource( "1_fydp6" )
 comp_shader = "res://shaders/path_tracing.comp"
 debug_size = 100
-loop = true
 
 [node name="DebugLog" type="Node" parent="PathTracing"]
 script = ExtResource( "2_x6p8m" )
@@ -116,16 +125,6 @@ path_tracing_node = NodePath("../PathTracing")
 anchor_right = 1.0
 anchor_bottom = 1.0
 stretch_mode = 1
-
-[node name="Panel" type="Panel" parent="UI"]
-offset_left = 20.0
-offset_top = 32.0
-offset_right = 208.0
-offset_bottom = 58.0
-__meta__ = {
-"_edit_layout_mode": 0,
-"_edit_use_custom_anchors": false
-}
 
 [node name="FpsValueLabel" type="Label" parent="UI"]
 offset_left = 168.0
@@ -143,6 +142,15 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
 text = " PathTracing FPS:"
+__meta__ = {
+"_edit_layout_mode": 0,
+"_edit_use_custom_anchors": false
+}
+
+[node name="Panel" type="Panel" parent="UI/FpsValueLabel"]
+offset_left = -148.0
+offset_right = 40.0
+offset_bottom = 26.0
 __meta__ = {
 "_edit_layout_mode": 0,
 "_edit_use_custom_anchors": false
@@ -198,7 +206,7 @@ color = Color(0.784314, 0.776471, 0.784314, 1)
 reflection_type = 0
 
 [node name="Back" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, 0, 0, 99897)
+transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, 0, 0, 100011)
 top_level = true
 mesh = SubResource( "SphereMesh_i0jfn" )
 script = ExtResource( "6_trha7" )
