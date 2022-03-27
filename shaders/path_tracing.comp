@@ -21,8 +21,8 @@ struct Sphere
 
 struct Ray
 {
-	vec4 pos;
-	vec4 dir;
+	vec3 pos;
+	vec3 dir;
 };
 
 
@@ -67,10 +67,7 @@ layout(set = 1, binding = 1, std140) buffer SphereBuffer
 /* ====================== GLOBAL CONSTS ====================== */
 
 
-uint idx = gl_GlobalInvocationID.x;
-uint idy = gl_GlobalInvocationID.y;
-uint width = gl_NumWorkGroups.x;
-uint height = gl_NumWorkGroups.y;
+const float PI = 3.14159265358979323846;
 
 
 // Reflection type (DIFFuse, SPECular, REFRactive)
@@ -78,6 +75,15 @@ uint height = gl_NumWorkGroups.y;
 const float DIFF = 0;
 const float SPEC = 1;
 const float REFR = 2;
+
+
+// Runtime global variables
+
+uint idx = gl_GlobalInvocationID.x;
+uint idy = gl_GlobalInvocationID.y;
+uint width = gl_NumWorkGroups.x;
+uint height = gl_NumWorkGroups.y;
+
 
 
 
@@ -111,9 +117,132 @@ void print4(vec4 vec)
 
 // Main
 
+float time = 1; // TODO: get time from cpu
+vec2 seed = vec2(idx, idy) * time;
+float rand()
+{
+	vec3 p3  = fract(vec3(seed.xyx) * .1031);
+	p3 += dot(p3, p3.yzx + 33.33);
+	float result = fract((p3.x + p3.y) * p3.z);
+
+	seed += result * 100;
+	return result;
+}
+
+
+float intersect_sphere(const Ray r, const Sphere s)
+{									// returns distance, 0 if nohit
+	vec3 op = s.pos.xyz - r.pos;	// Solve t^2*d.d + 2*t*(o-p).d + (o-p).(o-p)-R^2 = 0
+	float t, eps = 1e-4;
+	float b = dot(op, r.dir);
+	float det = b * b - dot(op, op) + s.rad * s.rad;
+	if (det < 0)
+		return 0;
+	else
+		det = sqrt(det);
+	return (t = b - det) > eps ? t : ((t = b + det) > eps ? t : 0);
+}
+
+
+bool intersect(const Ray r, inout float t, inout int id)
+{
+	float d;
+	float inf = t = 1e20;
+	for (int i = 0; i < sphere_buffer.sphere.length(); i++)
+	{
+		d = intersect_sphere(r, sphere_buffer.sphere[i]);
+		if (d != 0 && d < t)
+		{
+			t = d;
+			id = i;
+		}
+	}
+	return t < inf;
+}
+
+
+vec3 radiance(const Ray r_, const int depth_)
+{
+	float t;	// distance to intersection
+	int id = 0;	// id of intersected object
+
+	Ray r = r_;
+	int depth = depth_;
+
+	vec3 cl = vec3(0); // accumulated color
+	vec3 cf = vec3(1); // accumulated reflectance
+
+	while (true)
+	{
+		if (!intersect(r, t, id))
+			return cl;
+		const Sphere obj = sphere_buffer.sphere[id];
+
+		vec3 x = r.pos + r.dir * t;
+		vec3 n = normalize(x - obj.pos.xyz);
+		vec3 nl = dot(n, r.dir) < 0 ? n : n * -1;
+		vec3 f = obj.clr.xyz;
+		float p = f.x > f.y && f.x > f.z ? f.x : f.y > f.z ? f.y : f.z; // max refl
+
+		cl = cl + cf * obj.ems.xyz;
+		if (++depth > 5)
+			if (rand() < p)
+				f = f * (1 / p);
+			else
+				return cl; // R.R.
+		cf = cf * f;
+		if (obj.refl == DIFF)
+		{		// Ideal DIFFUSE reflection
+			float r1 = 2 * PI * rand();
+			float r2 = rand();
+			float r2s = sqrt(r2);
+			vec3 w = nl;
+			vec3 u = normalize(cross((abs(w.x) > .1 ? vec3(0, 1, 0) : vec3(1, 0, 0)), w));
+			vec3 v = cross(w, u);
+			vec3 d = normalize(u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2));
+			// return obj.ems + f * radiance(Ray(x,d),depth,Xi);
+			r = Ray(x, d);
+			continue;
+		}
+		else if (obj.refl == SPEC)
+		{ // Ideal SPECULAR reflection
+			// return obj.ems + f * radiance(Ray(x,r.dir-n*2*dot(n, r.dir)),depth,Xi);
+			r = Ray(x, r.dir - n * 2 * dot(n, r.dir));
+			continue;
+		}
+		Ray reflRay = Ray(x, r.dir - n * 2 * dot(n, r.dir));	// Ideal dielectric REFRACTION
+		bool into = dot(n, nl) > 0;								// Ray from outside going in?
+		float nc = 1, nt = 1.5, nnt = into ? nc / nt : nt / nc, ddn = dot(r.dir, nl), cos2t;
+		if ((cos2t = 1 - nnt * nnt * (1 - ddn * ddn)) < 0)
+		{ // Total internal reflection
+			// return obj.ems + f * radiance(reflRay,depth,Xi);
+			r = reflRay;
+			continue;
+		}
+		vec3 tdir = normalize(r.dir * nnt - n * ((into ? 1 : -1) * (ddn * nnt + sqrt(cos2t))));
+		float a = nt - nc, b = nt + nc, R0 = a * a / (b * b), c = 1 - (into ? -ddn : dot(tdir, n));
+		float Re = R0 + (1 - R0) * c * c * c * c * c, Tr = 1 - Re, P = .25 + .5 * Re, RP = Re / P, TP = Tr / (1 - P);
+		// return obj.ems + f * rand()<P ?
+		//						radiance(reflRay,	depth,Xi)*RP:
+		//						radiance(Ray(x,tdir),depth,Xi)*TP;
+		if (rand() < P)
+		{
+			cf = cf * RP;
+			r = reflRay;
+		}
+		else
+		{
+			cf = cf * TP;
+			r = Ray(x, tdir);
+		}
+		continue;
+	}
+}
+
 
 Ray get_cam_ray(uint idx, uint idy)
 {
+	// TODO: randomize ray
 	float fovA = radians(camera.fov / 2);
 	float camX = sin(fovA);
 	float camZ = -cos(fovA);
@@ -128,46 +257,14 @@ Ray get_cam_ray(uint idx, uint idy)
 	);
 
 	// rotated_vec = vec + 2.0 * cross(cross(vec, quat.xyz) + quat.w * vec, quat.xyz)
-	vec3 rotated = baseRay + 2.0 * cross(cross(baseRay, camera.rot.xyz)
-										+ camera.rot.w * baseRay, camera.rot.xyz);
-	return Ray(camera.pos, vec4(normalize(rotated), 1));
-}
-
-
-double intersect_sphere(const Ray r, const Sphere s)
-{								// returns distance, 0 if nohit
-	vec4 op = s.pos - r.pos;	// Solve t^2*d.d + 2*t*(o-p).d + (o-p).(o-p)-R^2 = 0
-	double t, eps = 1e-4;
-	double b = dot(op, r.dir);
-	double det = b * b - dot(op, op) + s.rad * s.rad;
-	if (det < 0)
-		return 0;
-	else
-		det = sqrt(det);
-	return (t = b - det) > eps ? t : ((t = b + det) > eps ? t : 0);
-}
-
-
-bool intersect(const Ray r, inout double t, inout int id)
-{
-	double d;
-	double inf = t = 1e20;
-	for (int i = 0; i < sphere_buffer.sphere.length(); i++)
-	{
-		d = intersect_sphere(r, sphere_buffer.sphere[i]);
-		if (d != 0 && d < t)
-		{
-			t = d;
-			id = i;
-		}
-	}
-	return t < inf;
+	vec3 rotated = baseRay + 2.0 * cross(cross(baseRay, camera.rot.xyz) + camera.rot.w * baseRay, camera.rot.xyz);
+	return Ray(camera.pos.xyz, normalize(rotated));
 }
 
 
 void main()
 {
-	double t;
+	float t;
 	int id;
 
 	Ray ray = get_cam_ray(idx, idy);

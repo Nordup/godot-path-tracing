@@ -16,8 +16,8 @@ struct Vec
   Vec operator*(double b) const { return Vec(x * b, y * b, z * b); }
   Vec mult(const Vec &b) const { return Vec(x * b.x, y * b.y, z * b.z); }
   Vec &norm() { return *this = *this * (1 / sqrt(x * x + y * y + z * z)); }
-  double dot(const Vec &b) const { return x * b.x + y * b.y + z * b.z; } // cross:
-  Vec operator%(Vec &b) { return Vec(y * b.z - z * b.y, z * b.x - x * b.z, x * b.y - y * b.x); }
+  double dot(const Vec &b) const { return x * b.x + y * b.y + z * b.z; }
+  Vec operator%(Vec &b) { return Vec(y * b.z - z * b.y, z * b.x - x * b.z, x * b.y - y * b.x); } // cross:
 };
 
 struct Ray
@@ -176,12 +176,16 @@ int main(int argc, char *argv[])
     fprintf(stderr, "\rRendering (%d spp) %5.2f%%", samps * 4, 100. * y / (h - 1));
     for (unsigned short x = 0, Xi[3] = {0, 0, y * y * y}; x < w; x++) // Loop cols
       for (int sy = 0, i = (h - y - 1) * w + x; sy < 2; sy++)         // 2x2 subpixel rows
-        for (int sx = 0; sx < 2; sx++, r = Vec())
+        for (int sx = 0; sx < 2; sx++)
         { // 2x2 subpixel cols
+          r = Vec();
           for (int s = 0; s < samps; s++)
           {
-            double r1 = 2 * erand48(Xi), dx = r1 < 1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
-            double r2 = 2 * erand48(Xi), dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
+            double r1 = 2 * erand48(Xi);
+            double dx = r1 < 1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
+            double r2 = 2 * erand48(Xi);
+            double dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
+            
             Vec d = cx * (((sx + .5 + dx) / 2 + x) / w - .5) +
                     cy * (((sy + .5 + dy) / 2 + y) / h - .5) + cam.d;
             r = r + radiance(Ray(cam.o + d * 140, d.norm()), 0, Xi) * (1. / samps);
