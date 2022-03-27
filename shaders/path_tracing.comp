@@ -114,7 +114,6 @@ void print4(vec4 vec)
 }
 
 
-
 // Main
 
 float time = 1; // TODO: get time from cpu
@@ -130,12 +129,14 @@ float rand()
 }
 
 
-float intersect_sphere(const Ray r, const Sphere s)
-{									// returns distance, 0 if nohit
-	vec3 op = s.pos.xyz - r.pos;	// Solve t^2*d.d + 2*t*(o-p).d + (o-p).(o-p)-R^2 = 0
+float intersect_sphere(const Ray ray, const Sphere sph)
+{
+	// returns distance, 0 if nohit
+	// Solve t^2*d.d + 2*t*(o-p).d + (o-p).(o-p)-R^2 = 0
+	vec3 op = sph.pos.xyz - ray.pos;
 	float t, eps = 1e-4;
-	float b = dot(op, r.dir);
-	float det = b * b - dot(op, op) + s.rad * s.rad;
+	float b = dot(op, ray.dir);
+	float det = b * b - dot(op, op) + sph.rad * sph.rad;
 	if (det < 0)
 		return 0;
 	else
@@ -144,13 +145,13 @@ float intersect_sphere(const Ray r, const Sphere s)
 }
 
 
-bool intersect(const Ray r, inout float t, inout int id)
+bool intersect(const Ray ray, inout float t, inout int id)
 {
 	float d;
 	float inf = t = 1e20;
 	for (int i = 0; i < sphere_buffer.sphere.length(); i++)
 	{
-		d = intersect_sphere(r, sphere_buffer.sphere[i]);
+		d = intersect_sphere(ray, sphere_buffer.sphere[i]);
 		if (d != 0 && d < t)
 		{
 			t = d;
@@ -161,81 +162,108 @@ bool intersect(const Ray r, inout float t, inout int id)
 }
 
 
-vec3 radiance(const Ray r_, const int depth_)
+vec3 radiance(Ray ray)
 {
-	float t;	// distance to intersection
-	int id = 0;	// id of intersected object
-
-	Ray r = r_;
-	int depth = depth_;
+	float t; // distance to intersection
+	int id = 0; // id of intersected object
+	int depth = 0;
 
 	vec3 cl = vec3(0); // accumulated color
 	vec3 cf = vec3(1); // accumulated reflectance
 
 	while (true)
 	{
-		if (!intersect(r, t, id))
+		if (!intersect(ray, t, id))
 			return cl;
-		const Sphere obj = sphere_buffer.sphere[id];
+		const Sphere sph = sphere_buffer.sphere[id];
 
-		vec3 x = r.pos + r.dir * t;
-		vec3 n = normalize(x - obj.pos.xyz);
-		vec3 nl = dot(n, r.dir) < 0 ? n : n * -1;
-		vec3 f = obj.clr.xyz;
-		float p = f.x > f.y && f.x > f.z ? f.x : f.y > f.z ? f.y : f.z; // max refl
+		vec3 hit = ray.pos + ray.dir * t; // hit point
+		vec3 n = normalize(hit - sph.pos.xyz);
+		vec3 nl = dot(n, ray.dir) < 0 ? n : n * -1;
+		vec3 f = sph.clr.xyz;
+		float p = max(max(f.x, f.y), f.z); // max refl
 
-		cl = cl + cf * obj.ems.xyz;
+		cl = cl + cf * sph.ems.xyz;
 		if (++depth > 5)
 			if (rand() < p)
 				f = f * (1 / p);
 			else
 				return cl; // R.R.
 		cf = cf * f;
-		if (obj.refl == DIFF)
-		{		// Ideal DIFFUSE reflection
+
+		if (sph.refl == DIFF)
+		{
+			// Ideal DIFFUSE reflection
+
 			float r1 = 2 * PI * rand();
 			float r2 = rand();
 			float r2s = sqrt(r2);
 			vec3 w = nl;
 			vec3 u = normalize(cross((abs(w.x) > .1 ? vec3(0, 1, 0) : vec3(1, 0, 0)), w));
 			vec3 v = cross(w, u);
-			vec3 d = normalize(u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2));
-			// return obj.ems + f * radiance(Ray(x,d),depth,Xi);
-			r = Ray(x, d);
-			continue;
+			vec3 dir = normalize(u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2));
+			
+			ray = Ray(hit, dir);
+
+			continue; // return sph.ems + f * radiance(Ray(hit,dir),depth,Xi);
 		}
-		else if (obj.refl == SPEC)
-		{ // Ideal SPECULAR reflection
-			// return obj.ems + f * radiance(Ray(x,r.dir-n*2*dot(n, r.dir)),depth,Xi);
-			r = Ray(x, r.dir - n * 2 * dot(n, r.dir));
-			continue;
-		}
-		Ray reflRay = Ray(x, r.dir - n * 2 * dot(n, r.dir));	// Ideal dielectric REFRACTION
-		bool into = dot(n, nl) > 0;								// Ray from outside going in?
-		float nc = 1, nt = 1.5, nnt = into ? nc / nt : nt / nc, ddn = dot(r.dir, nl), cos2t;
-		if ((cos2t = 1 - nnt * nnt * (1 - ddn * ddn)) < 0)
-		{ // Total internal reflection
-			// return obj.ems + f * radiance(reflRay,depth,Xi);
-			r = reflRay;
-			continue;
-		}
-		vec3 tdir = normalize(r.dir * nnt - n * ((into ? 1 : -1) * (ddn * nnt + sqrt(cos2t))));
-		float a = nt - nc, b = nt + nc, R0 = a * a / (b * b), c = 1 - (into ? -ddn : dot(tdir, n));
-		float Re = R0 + (1 - R0) * c * c * c * c * c, Tr = 1 - Re, P = .25 + .5 * Re, RP = Re / P, TP = Tr / (1 - P);
-		// return obj.ems + f * rand()<P ?
-		//						radiance(reflRay,	depth,Xi)*RP:
-		//						radiance(Ray(x,tdir),depth,Xi)*TP;
-		if (rand() < P)
+		else if (sph.refl == SPEC)
 		{
-			cf = cf * RP;
-			r = reflRay;
+			// Ideal SPECULAR reflection
+
+			ray = Ray(hit, ray.dir - n * 2 * dot(n, ray.dir));
+
+			continue; // return sph.ems + f * radiance(Ray(hit,ray.dir-n*2*dot(n, ray.dir)),depth,Xi);
 		}
 		else
 		{
-			cf = cf * TP;
-			r = Ray(x, tdir);
+			// Ideal dielectric REFRACTION
+
+			Ray reflRay = Ray(hit, ray.dir - n * 2 * dot(n, ray.dir));
+			bool into = dot(n, nl) > 0; // Ray from outside going in?
+			
+			float nc = 1;
+			float nt = 1.5;
+			float nnt = into ? nc / nt : nt / nc;
+			float ddn = dot(ray.dir, nl);
+			float cos2t;
+			
+			if ((cos2t = 1 - nnt * nnt * (1 - ddn * ddn)) < 0)
+			{
+				// Total internal reflection
+
+				ray = reflRay;
+
+				continue; // return sph.ems + f * radiance(reflRay,depth,Xi);
+			}
+
+			vec3 tdir = normalize(ray.dir * nnt - n * ((into ? 1 : -1) * (ddn * nnt + sqrt(cos2t))));
+			
+			float a = nt - nc;
+			float b = nt + nc;
+			float R0 = a * a / (b * b);
+			float c = 1 - (into ? -ddn : dot(tdir, n));
+			float Re = R0 + (1 - R0) * c * c * c * c * c;
+			float Tr = 1 - Re;
+			float P = .25 + .5 * Re;
+			float RP = Re / P;
+			float TP = Tr / (1 - P);
+			
+			if (rand() < P)
+			{
+				cf = cf * RP;
+				ray = reflRay;
+			}
+			else
+			{
+				cf = cf * TP;
+				ray = Ray(hit, tdir);
+			}
+
+			continue;	// return sph.ems + f * rand()<P ?
+						//						radiance(reflRay,	depth,Xi)*RP:
+						//						radiance(Ray(hit,tdir),depth,Xi)*TP;
 		}
-		continue;
 	}
 }
 
