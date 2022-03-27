@@ -34,10 +34,10 @@ func get_data() -> PackedByteArray:
 	update_data()
 	var pba = PackedByteArray()
 	pba.append_array(PBATools.encode_vec3(sphere.pos))
-	pba.append_array(PBATools.encode_float(sphere.rad))
+	pba.append_array(PBATools.encode_float_x4(sphere.rad))
 	pba.append_array(PBATools.encode_color(sphere.clr))
 	pba.append_array(PBATools.encode_color(sphere.ems))
-	pba.append_array(PBATools.encode_float(float(sphere.refl)))
+	pba.append_array(PBATools.encode_float_x4(float(sphere.refl)))
 	return pba
 
 
