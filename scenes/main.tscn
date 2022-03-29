@@ -257,7 +257,7 @@ mesh = SubResource( "SphereMesh_ipv1x" )
 script = ExtResource( "6_trha7" )
 radius = 10.0
 color = Color(1, 1, 1, 1)
-emission = Color(6, 6, 6, 1)
+emission = Color(12, 12, 12, 1)
 reflection_type = 0
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Scene"]
