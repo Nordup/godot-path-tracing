@@ -165,7 +165,7 @@ Vec radiance(const Ray &r_, int depth_, unsigned short *Xi)
 
 int main(int argc, char *argv[])
 {
-  int w = 512, h = 384, samps = argc == 2 ? atoi(argv[1]) / 4 : 1; // # samples
+  int w = 800, h = 600, samps = argc == 2 ? atoi(argv[1]) / 4 : 1; // # samples
   Ray cam(Vec(50, 52, 295.6), Vec(0, -0.042612, -1).norm());       // cam pos, dir
   Vec cx = Vec(w * .5135 / h), cy = (cx % cam.d).norm() * .5135, r, *c = new Vec[w * h];
 

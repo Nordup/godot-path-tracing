@@ -79,5 +79,22 @@ func get_texure(rgbaf_pba: PackedByteArray) -> Texture:
 	var image = Image.new()
 	image.create_from_data(width, height, false, Image.FORMAT_RGBAF, rgbaf_pba)
 	var texture = ImageTexture.new()
-	texture.create_from_image(image)
+	texture.create_from_image(add_sample(image))
 	return texture
+
+
+var samples_sum: Image
+var count: int = 0
+func add_sample(sample: Image) -> Image:
+	count += 1
+	if samples_sum == null:
+		samples_sum = sample
+		return sample
+	
+	var size = samples_sum.get_size()
+	for x in size.x:
+		for y in size.y:
+			var a = samples_sum.get_pixel(x, y) * (count - 1) / count
+			var b = sample.get_pixel(x, y) * 1 / count
+			samples_sum.set_pixel(x, y, a + b)
+	return samples_sum

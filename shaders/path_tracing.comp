@@ -177,7 +177,7 @@ vec3 radiance(Ray ray)
 	vec3 cl = vec3(0); // accumulated color
 	vec3 cf = vec3(1); // accumulated reflectance
 
-	int unroll = int(Depth) * 5;
+	int unroll = int(Depth) * 5; // Shader compilation loop unrolling
 	while (unroll-- > 0)
 	{
 		if (!intersect(ray, t, id))
@@ -303,7 +303,8 @@ void main()
 	int id;
 
 	Ray ray = get_cam_ray(idx, idy);
-	color_buffer.pixel[idx + idy * width] = vec4(radiance(ray), 1);
+	vec3 color = radiance(ray);
+	color_buffer.pixel[idx + idy * width] = vec4(color, 1);
 
 
 	// Debug

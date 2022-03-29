@@ -110,10 +110,11 @@ ambient_light_sky_contribution = 0.0
 script = ExtResource( "1_fydp6" )
 comp_shader = "res://shaders/path_tracing.comp"
 debug_size = 100
+loop = true
 
 [node name="DebugLog" type="Node" parent="PathTracing"]
 script = ExtResource( "2_x6p8m" )
-debug_mode = -1
+debug_mode = 0
 
 [node name="UI" type="Control" parent="."]
 anchor_right = 1.0
@@ -173,7 +174,7 @@ __meta__ = {
 [node name="Scene" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="Scene"]
-transform = Transform3D(0.99905, -0.00591073, 0.043174, 0, 0.990758, 0.13564, -0.0435767, -0.135511, 0.989817, 0.347612, 2.55536, 7.38275)
+transform = Transform3D(1, 0, 0, 0, 0.995884, 0.0906326, 0, -0.0906326, 0.995884, 0, 2.423, 6.47)
 top_level = true
 keep_aspect = 0
 script = ExtResource( "3_0b2li" )
@@ -232,7 +233,7 @@ color = Color(0.784314, 0.776471, 0.784314, 1)
 reflection_type = 0
 
 [node name="Mirr" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.242, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.242, 1, -0.77638)
 top_level = true
 mesh = SubResource( "SphereMesh_28jwi" )
 script = ExtResource( "6_trha7" )
@@ -241,7 +242,7 @@ color = Color(1, 1, 1, 1)
 reflection_type = 1
 
 [node name="Glas" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.469, 1, 0.805)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.469, 1, 0.0286196)
 top_level = true
 mesh = SubResource( "SphereMesh_fx4ml" )
 script = ExtResource( "6_trha7" )
@@ -250,13 +251,13 @@ color = Color(1, 1, 1, 1)
 reflection_type = 2
 
 [node name="Lite" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 13.932, 0)
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 13.932, -0.421)
 top_level = true
 mesh = SubResource( "SphereMesh_ipv1x" )
 script = ExtResource( "6_trha7" )
 radius = 10.0
 color = Color(1, 1, 1, 1)
-emission = Color(12, 12, 12, 1)
+emission = Color(6, 6, 6, 1)
 reflection_type = 0
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Scene"]
