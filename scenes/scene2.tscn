@@ -1,0 +1,227 @@
+[gd_scene load_steps=16 format=3 uid="uid://dr11j63uh18fo"]
+
+[ext_resource type="Script" path="res://scripts/path_tracing/path_tracing.gd" id="1_fydp6"]
+[ext_resource type="Script" path="res://scripts/path_tracing/ui.gd" id="2_45d46"]
+[ext_resource type="Script" path="res://scripts/path_tracing/path_tracing_log.gd" id="2_x6p8m"]
+[ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
+[ext_resource type="Script" path="res://scripts/objects/sphere.gd" id="6_trha7"]
+
+[sub_resource type="Theme" id="Theme_atioi"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yh3ml"]
+albedo_color = Color(0.784314, 0.776471, 0.784314, 1)
+emission = Color(0.564706, 0.305882, 0.407843, 1)
+emission_energy = 3.39
+
+[sub_resource type="SphereMesh" id="SphereMesh_7efqb"]
+material = SubResource( "StandardMaterial3D_yh3ml" )
+rings = 400
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3d63t"]
+albedo_color = Color(0, 0, 0, 0.184314)
+emission = Color(0.564706, 0.305882, 0.407843, 1)
+emission_energy = 3.39
+refraction_enabled = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_fx4ml"]
+material = SubResource( "StandardMaterial3D_3d63t" )
+radial_segments = 30
+rings = 20
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqybl"]
+metallic = 1.0
+metallic_specular = 1.0
+roughness = 0.0
+emission = Color(0.564706, 0.305882, 0.407843, 1)
+emission_energy = 3.39
+
+[sub_resource type="SphereMesh" id="SphereMesh_28jwi"]
+material = SubResource( "StandardMaterial3D_vqybl" )
+radial_segments = 30
+rings = 10
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yfv6p"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy = 12.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_ipv1x"]
+material = SubResource( "StandardMaterial3D_yfv6p" )
+radial_segments = 30
+rings = 100
+
+[sub_resource type="Environment" id="Environment_ugo1d"]
+background_mode = 1
+ambient_light_sky_contribution = 0.0
+
+[node name="Main" type="Node3D"]
+
+[node name="PathTracing" type="Node" parent="."]
+script = ExtResource( "1_fydp6" )
+comp_shader = "res://shaders/path_tracing.comp"
+debug_size = 100
+loop = true
+
+[node name="DebugLog" type="Node" parent="PathTracing"]
+script = ExtResource( "2_x6p8m" )
+debug_mode = 0
+
+[node name="UI" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( "2_45d46" )
+path_tracing_node = NodePath("../PathTracing")
+
+[node name="RenderedImage" type="TextureRect" parent="UI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+stretch_mode = 1
+
+[node name="FpsValueLabel" type="Label" parent="UI"]
+offset_left = 168.0
+offset_top = 32.0
+offset_right = 207.998
+offset_bottom = 58.0
+text = "0"
+
+[node name="FpsTextLabel" type="Label" parent="UI/FpsValueLabel"]
+offset_left = -142.0
+offset_right = -9.0
+offset_bottom = 26.0
+theme = SubResource( "Theme_atioi" )
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+text = " PathTracing FPS:"
+__meta__ = {
+"_edit_layout_mode": 0,
+"_edit_use_custom_anchors": false
+}
+
+[node name="Panel" type="Panel" parent="UI/FpsValueLabel"]
+offset_left = -148.0
+offset_right = 40.0
+offset_bottom = 26.0
+__meta__ = {
+"_edit_layout_mode": 0,
+"_edit_use_custom_anchors": false
+}
+
+[node name="RenderButton" type="Button" parent="UI"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -128.0
+offset_top = 32.0
+offset_right = -32.0
+offset_bottom = 69.0005
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 16
+text = "Render"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Scene" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 0.995884, 0.0906326, 0, -0.0906326, 0.995884, 0, 2.423, 6.47)
+top_level = true
+keep_aspect = 0
+script = ExtResource( "3_0b2li" )
+
+[node name="Botm" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, 0, -100000, 0)
+top_level = true
+mesh = SubResource( "SphereMesh_7efqb" )
+script = ExtResource( "6_trha7" )
+radius = 100000.0
+color = Color(0.211765, 0.211765, 0.211765, 1)
+reflection_type = 0
+
+[node name="Diff" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 4.006, 2, -4.027)
+top_level = true
+mesh = SubResource( "SphereMesh_fx4ml" )
+script = ExtResource( "6_trha7" )
+radius = 2.0
+color = Color(1, 0.00784314, 0.0588235, 1)
+reflection_type = 0
+
+[node name="Diff2" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, -15.9609, -18.101, -32.2941)
+top_level = true
+mesh = SubResource( "SphereMesh_fx4ml" )
+script = ExtResource( "6_trha7" )
+radius = 30.0
+color = Color(0.560784, 1, 0.568627, 1)
+reflection_type = 0
+
+[node name="Mirr" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.242, 1, -2.005)
+top_level = true
+mesh = SubResource( "SphereMesh_28jwi" )
+script = ExtResource( "6_trha7" )
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 1
+
+[node name="Mirr2" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.183556, 1, -6.95439)
+top_level = true
+mesh = SubResource( "SphereMesh_28jwi" )
+script = ExtResource( "6_trha7" )
+radius = 0.7
+color = Color(0.647059, 0, 1, 1)
+reflection_type = 1
+
+[node name="Glas" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.49441, 1.035, -7.13578)
+top_level = true
+mesh = SubResource( "SphereMesh_fx4ml" )
+script = ExtResource( "6_trha7" )
+radius = 1.0
+color = Color(1, 0.929412, 0, 1)
+reflection_type = 2
+
+[node name="Glas2" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49559, 1.035, -0.18135)
+top_level = true
+mesh = SubResource( "SphereMesh_fx4ml" )
+script = ExtResource( "6_trha7" )
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Glas3" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.0244753, 2.32416, 5.10291)
+top_level = true
+mesh = SubResource( "SphereMesh_fx4ml" )
+script = ExtResource( "6_trha7" )
+radius = 1.5
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Lite" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(10000, 0, 0, 0, 10000, 0, 0, 0, 10000, 0, 13.932, -0.421)
+top_level = true
+mesh = SubResource( "SphereMesh_ipv1x" )
+script = ExtResource( "6_trha7" )
+radius = 10000.0
+color = Color(0.106, 0.332133, 0.53, 1)
+emission = Color(1, 1, 1, 1)
+reflection_type = 0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.90204, 0)
+light_energy = 4.2
+omni_range = 108.2
+
+[node name="Env" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Env"]
+environment = SubResource( "Environment_ugo1d" )
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Env"]
+transform = Transform3D(0.845986, -0.191493, -0.497633, 0.52273, 0.481945, 0.703194, 0.105175, -0.85502, 0.507818, 7.30817, 1.78789, 0)
+visible = false
