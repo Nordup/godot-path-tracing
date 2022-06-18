@@ -3,7 +3,7 @@ class_name FileTools
 
 static func get_file_text(file_path: String) -> String:
 	var file = File.new()
-	var err = file.open(file_path, File.READ_WRITE)
+	var err = file.open(file_path, File.READ)
 	if err != OK:
 		push_error("Cannot open file: " + file_path)
 		return ""
@@ -14,7 +14,7 @@ static func get_file_text(file_path: String) -> String:
 
 static func get_file_data(file_path: String) -> PackedByteArray:
 	var file = File.new()
-	var err = file.open(file_path, File.READ_WRITE)
+	var err = file.open(file_path, File.READ)
 	if err != OK:
 		push_error("Cannot open file: " + file_path)
 		return PackedByteArray()
