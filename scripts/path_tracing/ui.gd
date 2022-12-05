@@ -18,9 +18,9 @@ func _ready() -> void:
 	path_tracing.rendered.connect(_on_rendered)
 
 
-func _on_rendered(texture: Texture, _render_time: int) -> void:
+func _on_rendered(texture: Texture, render_time: int) -> void:
 	texture_rect.texture = texture
-	fps.text = str(1000 / _render_time)
+	fps.text = str(1000 / render_time)
 
 
 func _on_button_pressed() -> void:
