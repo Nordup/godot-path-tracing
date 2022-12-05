@@ -76,11 +76,8 @@ func get_objects_uset() -> USet:
 
 func get_texure(rgbaf_pba: PackedByteArray) -> Texture:
 	if rgbaf_pba == null: return
-	var image = Image.new()
-	image.create_from_data(width, height, false, Image.FORMAT_RGBAF, rgbaf_pba)
-	var texture = ImageTexture.new()
-	texture.create_from_image(add_sample(image))
-	return texture
+	var image = Image.create_from_data(width, height, false, Image.FORMAT_RGBAF, rgbaf_pba)
+	return ImageTexture.create_from_image(add_sample(image))
 
 
 var samples_sum: Image
