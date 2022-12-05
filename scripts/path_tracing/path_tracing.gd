@@ -12,7 +12,7 @@ var width
 var height
 
 # Signals
-signal rendered(texure: Texture, render_time: int)
+signal rendered(image: Image, render_time: int)
 
 # GPU Compute vars
 var compute: GPUCompute
@@ -44,10 +44,11 @@ func render() -> void:
 	var glbs_uset = get_globals_uset()
 	var objects_uset = get_objects_uset()
 	compute.dispatch([fixed_uset, glbs_uset, objects_uset])
-	var texture = get_texure(compute.r_device.texture_get_data(rendered_image.rid, 0))
+	var rgbaf_pba = compute.r_device.texture_get_data(rendered_image.rid, 0)
+	var image = Image.create_from_data(width, height, false, Image.FORMAT_RGBAF, rgbaf_pba)
 	samples_count += 1
 	
-	rendered.emit(texture, Time.get_ticks_msec() - msec)
+	rendered.emit(image, Time.get_ticks_msec() - msec)
 
 
 func create_fixed_uset() -> USet:
@@ -77,12 +78,6 @@ func get_objects_uset() -> USet:
 	var sph_pba = SceneCollector.spheres_pba()
 	var sph_buffer = SBuffer.new(compute.r_device, sph_pba.size(), sph_pba, 1)
 	return USet.new(compute, [cam_buffer.uniform, sph_buffer.uniform], 2)
-
-
-func get_texure(rgbaf_pba: PackedByteArray) -> Texture:
-	if rgbaf_pba == null: return
-	var image = Image.create_from_data(width, height, false, Image.FORMAT_RGBAF, rgbaf_pba)
-	return ImageTexture.create_from_image(image)
 
 
 func clear_samples() -> void:

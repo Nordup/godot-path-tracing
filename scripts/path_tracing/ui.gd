@@ -17,9 +17,13 @@ func _ready() -> void:
 	path_tracing.rendered.connect(_on_rendered)
 
 
-func _on_rendered(texture: Texture, _render_time: int) -> void:
-	texture_rect.texture = texture
-	fps.text = "FPS: " + str(Engine.get_frames_per_second())
+func _on_rendered(image: Image, _render_time: int) -> void:
+	fps.text = "FPS: %.0f" % Engine.get_frames_per_second()
+	
+	if texture_rect.texture == null:
+		texture_rect.texture = ImageTexture.create_from_image(image)
+	else:
+		texture_rect.texture.update(image)
 
 
 func _on_button_pressed() -> void:

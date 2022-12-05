@@ -14,7 +14,7 @@ func _ready() -> void:
 	path_tracing.rendered.connect(_on_rendered)
 
 
-func _on_rendered(_texture: Texture, render_time: int) -> void:
+func _on_rendered(_image: Image, render_time: int) -> void:
 	DebugTools.print_quiet("\nRendered in " + str(render_time) + " msec")
 	
 	# Print debug buffer data

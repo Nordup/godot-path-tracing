@@ -1,17 +1,32 @@
-[gd_scene load_steps=15 format=3 uid="uid://dr11j63uh18fo"]
+[gd_scene load_steps=17 format=3 uid="uid://dr11j63uh18fo"]
 
 [ext_resource type="PackedScene" uid="uid://dwy625rm8i4a4" path="res://scenes/path_tracing_base.tscn" id="1_v8vns"]
 [ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
 [ext_resource type="Script" path="res://scripts/objects/sphere.gd" id="6_trha7"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yh3ml"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1eub0"]
 albedo_color = Color(0.784314, 0.776471, 0.784314, 1)
 emission = Color(0.564706, 0.305882, 0.407843, 1)
 emission_energy_multiplier = 3.39
 
-[sub_resource type="SphereMesh" id="SphereMesh_7efqb"]
-material = SubResource("StandardMaterial3D_yh3ml")
+[sub_resource type="SphereMesh" id="SphereMesh_w5o2h"]
+material = SubResource("StandardMaterial3D_1eub0")
+radius = 100000.0
+height = 200000.0
 rings = 400
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wwonh"]
+albedo_color = Color(0, 0, 0, 0.184314)
+emission = Color(0.564706, 0.305882, 0.407843, 1)
+emission_energy_multiplier = 3.39
+refraction_enabled = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_nak1q"]
+material = SubResource("StandardMaterial3D_wwonh")
+radius = 2.0
+height = 4.0
+radial_segments = 30
+rings = 20
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3d63t"]
 albedo_color = Color(0, 0, 0, 0.184314)
@@ -44,6 +59,8 @@ emission_energy_multiplier = 12.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_ipv1x"]
 material = SubResource("StandardMaterial3D_yfv6p")
+radius = 100000.0
+height = 200000.0
 radial_segments = 30
 rings = 100
 
@@ -73,9 +90,9 @@ keep_aspect = 0
 script = ExtResource("3_0b2li")
 
 [node name="Botm" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, 0, -100000, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -100000, 0)
 top_level = true
-mesh = SubResource("SphereMesh_7efqb")
+mesh = SubResource("SphereMesh_w5o2h")
 script = ExtResource("6_trha7")
 radius = 100000.0
 color = Color(0.211765, 0.211765, 0.211765, 1)
@@ -84,7 +101,7 @@ reflection_type = 0
 [node name="Diff" type="MeshInstance3D" parent="Scene"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 4.006, 2, -4.027)
 top_level = true
-mesh = SubResource("SphereMesh_fx4ml")
+mesh = SubResource("SphereMesh_nak1q")
 script = ExtResource("6_trha7")
 radius = 2.0
 color = Color(1, 0.00784314, 0.0588235, 1)
@@ -145,7 +162,7 @@ color = Color(1, 1, 1, 1)
 reflection_type = 2
 
 [node name="Lite" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(10000, 0, 0, 0, 10000, 0, 0, 0, 10000, 0, 13.932, -0.421)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.932, -0.421)
 top_level = true
 mesh = SubResource("SphereMesh_ipv1x")
 script = ExtResource("6_trha7")
