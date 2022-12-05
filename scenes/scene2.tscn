@@ -61,7 +61,8 @@ ambient_light_sky_contribution = 0.0
 
 [node name="Main" type="Node3D"]
 
-[node name="PathTracingBase" parent="." instance=ExtResource("1_v8vns")]
+[node name="PathTracingBase" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("1_v8vns")]
+camera = NodePath("../Scene/Camera3D")
 
 [node name="Scene" type="Node3D" parent="."]
 

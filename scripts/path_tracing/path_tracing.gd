@@ -96,3 +96,8 @@ func add_sample(sample: Image) -> Image:
 			var b = sample.get_pixel(x, y) * 1 / count
 			samples_sum.set_pixel(x, y, a + b)
 	return samples_sum
+
+
+func clear_samples() -> void:
+	samples_sum = null
+	count = 0
