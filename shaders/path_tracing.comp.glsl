@@ -50,6 +50,7 @@ layout(set = 1, binding = 0, std430) restrict readonly buffer Globals
 {
 	float Depth;
 	float TicksMsec;
+	float SamplesCount;
 };
 
 
@@ -298,6 +299,16 @@ void main()
 {
 	Ray ray = get_cam_ray();
 	vec4 pixel = vec4(radiance(ray), 1);
+
+	// Add sample
+	if (SamplesCount != 0)
+	{
+		vec4 texel = imageLoad(rendered_image, inv_id);
+		vec4 a = texel * (SamplesCount - 1) / SamplesCount;
+		vec4 b = pixel * 1 / SamplesCount;
+		pixel = a + b;
+	}
+
 	imageStore(rendered_image, inv_id, pixel);
 
 

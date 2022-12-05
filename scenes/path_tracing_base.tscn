@@ -18,10 +18,10 @@ loop = true
 
 [node name="DebugLog" type="Node" parent="PathTracing" node_paths=PackedStringArray("path_tracing")]
 script = ExtResource("3_q0ueh")
-debug_mode = 1
+debug_mode = -1
 path_tracing = NodePath("..")
 
-[node name="UI" type="Control" parent="." node_paths=PackedStringArray("path_tracing")]
+[node name="UI" type="Control" parent="." node_paths=PackedStringArray("path_tracing", "texture_rect", "fps", "button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,6 +30,9 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_a5afx")
 path_tracing = NodePath("../PathTracing")
+texture_rect = NodePath("RenderedImage")
+fps = NodePath("FPS/Label")
+button = NodePath("RenderButton")
 
 [node name="RenderedImage" type="TextureRect" parent="UI"]
 anchors_preset = 15
@@ -39,13 +42,13 @@ grow_horizontal = 2
 grow_vertical = 2
 stretch_mode = 1
 
-[node name="Panel" type="Panel" parent="UI"]
-offset_left = 20.0
+[node name="FPS" type="Panel" parent="UI"]
+offset_left = 32.0
 offset_top = 32.0
-offset_right = 106.0
+offset_right = 118.0
 offset_bottom = 58.0
 
-[node name="FpsValueLabel" type="Label" parent="UI/Panel"]
+[node name="Label" type="Label" parent="UI/FPS"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -54,6 +57,29 @@ grow_vertical = 2
 text = "FPS: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="MovementHint" type="Panel" parent="UI"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = -77.0
+offset_right = 169.0
+offset_bottom = -22.0
+grow_vertical = 0
+
+[node name="Label" type="Label" parent="UI/MovementHint"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "WASD and RMB
+for movement"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
 
 [node name="RenderButton" type="Button" parent="UI"]
 anchors_preset = 1

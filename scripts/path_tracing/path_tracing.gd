@@ -7,7 +7,7 @@ class_name PathTracing
 @export_range(3, 10) var ray_depth: int = 5
 @export var loop: bool
 
-# Internal vars
+# Consts
 var width
 var height
 
@@ -20,6 +20,8 @@ var compute: GPUCompute
 var fixed_uset: USet
 var rendered_image: RDTexture
 var debug_buffer: SBuffer
+
+var samples_count: float = 0
 
 
 func _enter_tree() -> void:
@@ -43,6 +45,7 @@ func render() -> void:
 	var objects_uset = get_objects_uset()
 	compute.dispatch([fixed_uset, glbs_uset, objects_uset])
 	var texture = get_texure(compute.r_device.texture_get_data(rendered_image.rid, 0))
+	samples_count += 1
 	
 	rendered.emit(texture, Time.get_ticks_msec() - msec)
 
@@ -63,6 +66,7 @@ func get_globals_uset() -> USet:
 	var pba = PackedByteArray()
 	pba.append_array(PBATools.encode_float(ray_depth))
 	pba.append_array(PBATools.encode_float(Time.get_ticks_msec()))
+	pba.append_array(PBATools.encode_float(samples_count))
 	var glbs_buffer = SBuffer.new(compute.r_device, pba.size(), pba, 0)
 	return USet.new(compute, [glbs_buffer.uniform], 1)
 
@@ -78,26 +82,8 @@ func get_objects_uset() -> USet:
 func get_texure(rgbaf_pba: PackedByteArray) -> Texture:
 	if rgbaf_pba == null: return
 	var image = Image.create_from_data(width, height, false, Image.FORMAT_RGBAF, rgbaf_pba)
-	return ImageTexture.create_from_image(add_sample(image))
-
-
-var samples_sum: Image
-var count: int = 0
-func add_sample(sample: Image) -> Image:
-	count += 1
-	if samples_sum == null:
-		samples_sum = sample
-		return sample
-	
-	var size = samples_sum.get_size()
-	for x in size.x:
-		for y in size.y:
-			var a = samples_sum.get_pixel(x, y) * (count - 1) / count
-			var b = sample.get_pixel(x, y) * 1 / count
-			samples_sum.set_pixel(x, y, a + b)
-	return samples_sum
+	return ImageTexture.create_from_image(image)
 
 
 func clear_samples() -> void:
-	samples_sum = null
-	count = 0
+	samples_count = 0

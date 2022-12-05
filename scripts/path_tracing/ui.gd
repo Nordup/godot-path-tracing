@@ -2,9 +2,9 @@ extends Control
 
 @export var path_tracing: PathTracing
 
-@onready var texture_rect = $RenderedImage as TextureRect
-@onready var fps = $Panel/FpsValueLabel as Label
-@onready var button = $RenderButton as Button
+@export var texture_rect: TextureRect
+@export var fps: Label
+@export var button: Button
 
 
 func _ready() -> void:
