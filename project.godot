@@ -12,7 +12,7 @@ _global_script_classes=[{
 "base": "Camera3D",
 "class": &"Camera",
 "language": &"GDScript",
-"path": "res://scripts/objects/camera.gd"
+"path": "res://scripts/path_tracing/objects/camera.gd"
 }, {
 "base": "RefCounted",
 "class": &"GPUCompute",
@@ -47,7 +47,7 @@ _global_script_classes=[{
 "base": "MeshInstance3D",
 "class": &"Sphere",
 "language": &"GDScript",
-"path": "res://scripts/objects/sphere.gd"
+"path": "res://scripts/path_tracing/objects/sphere.gd"
 }, {
 "base": "RefCounted",
 "class": &"USet",
@@ -75,7 +75,7 @@ config/icon="res://res/icon.png"
 
 [autoload]
 
-SceneCollector="*res://scripts/objects/scene_collector.gd"
+SceneCollector="*res://scripts/path_tracing/objects/scene_collector.gd"
 DebugTools="*res://scripts/debug_tools.gd"
 
 [debug]

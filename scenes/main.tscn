@@ -1,8 +1,8 @@
 [gd_scene load_steps=23 format=3 uid="uid://by21kjq1rn1bq"]
 
-[ext_resource type="PackedScene" uid="uid://dwy625rm8i4a4" path="res://scenes/path_tracing_base.tscn" id="1_hg4oq"]
-[ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
-[ext_resource type="Script" path="res://scripts/objects/sphere.gd" id="6_trha7"]
+[ext_resource type="PackedScene" uid="uid://dgjw0ngysp8ye" path="res://scenes/path_tracing_base.tscn" id="1_hg4oq"]
+[ext_resource type="Script" path="res://scripts/path_tracing/objects/camera.gd" id="3_0b2li"]
+[ext_resource type="Script" path="res://scripts/path_tracing/objects/sphere.gd" id="6_trha7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ds1bn"]
 albedo_color = Color(0.188235, 0.176471, 0.741176, 1)

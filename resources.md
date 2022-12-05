@@ -7,3 +7,5 @@ https://twistedpairdevelopment.wordpress.com/2013/02/11/rotating-a-vector-by-a-q
 http://www.codinglabs.net/article_world_view_projection_matrix.aspx - World, View and Projection Transformation Matricess
 
 https://www.kevinbeason.com/smallpt - smallpt: Global Illumination in 99 lines of C++
+
+https://youtu.be/ueUMr92GQJc - NekotoArts godot 4 raytracing video

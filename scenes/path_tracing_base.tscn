@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://dwy625rm8i4a4"]
+[gd_scene load_steps=6 format=3 uid="uid://dgjw0ngysp8ye"]
 
-[ext_resource type="Script" path="res://scripts/free_look_camera.gd" id="1_cfb3k"]
+[ext_resource type="Script" path="res://scripts/path_tracing/free_look_camera.gd" id="1_cfb3k"]
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing.gd" id="1_va7si"]
 [ext_resource type="RDShaderFile" uid="uid://dgpb6r3wf6jeu" path="res://shaders/path_tracing.comp.glsl" id="2_gh3y4"]
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing_log.gd" id="3_q0ueh"]
