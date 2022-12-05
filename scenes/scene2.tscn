@@ -1,13 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://dr11j63uh18fo"]
+[gd_scene load_steps=15 format=3 uid="uid://dr11j63uh18fo"]
 
-[ext_resource type="Script" path="res://scripts/path_tracing/path_tracing.gd" id="1_fydp6"]
-[ext_resource type="Script" path="res://scripts/path_tracing/ui.gd" id="2_45d46"]
-[ext_resource type="RDShaderFile" uid="uid://byxg7e2svxfsy" path="res://shaders/path_tracing.glsl" id="2_n2ins"]
-[ext_resource type="Script" path="res://scripts/path_tracing/path_tracing_log.gd" id="2_x6p8m"]
+[ext_resource type="PackedScene" uid="uid://dwy625rm8i4a4" path="res://scenes/path_tracing_base.tscn" id="1_v8vns"]
 [ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
 [ext_resource type="Script" path="res://scripts/objects/sphere.gd" id="6_trha7"]
-
-[sub_resource type="Theme" id="Theme_atioi"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yh3ml"]
 albedo_color = Color(0.784314, 0.776471, 0.784314, 1)
@@ -66,73 +61,7 @@ ambient_light_sky_contribution = 0.0
 
 [node name="Main" type="Node3D"]
 
-[node name="PathTracing" type="Node" parent="."]
-script = ExtResource("1_fydp6")
-c_shader = ExtResource("2_n2ins")
-debug_size = 100
-loop = true
-
-[node name="DebugLog" type="Node" parent="PathTracing" node_paths=PackedStringArray("path_tracing")]
-script = ExtResource("2_x6p8m")
-debug_mode = 1
-path_tracing = NodePath("..")
-
-[node name="UI" type="Control" parent="." node_paths=PackedStringArray("path_tracing")]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("2_45d46")
-path_tracing = NodePath("../PathTracing")
-
-[node name="RenderedImage" type="TextureRect" parent="UI"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-stretch_mode = 1
-
-[node name="FpsValueLabel" type="Label" parent="UI"]
-layout_mode = 0
-offset_left = 168.0
-offset_top = 32.0
-offset_right = 207.998
-offset_bottom = 58.0
-text = "0"
-
-[node name="FpsTextLabel" type="Label" parent="UI/FpsValueLabel"]
-layout_mode = 0
-offset_left = -142.0
-offset_right = -9.0
-offset_bottom = 26.0
-theme = SubResource("Theme_atioi")
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-text = " PathTracing FPS:"
-
-[node name="Panel" type="Panel" parent="UI/FpsValueLabel"]
-layout_mode = 0
-offset_left = -148.0
-offset_right = 40.0
-offset_bottom = 26.0
-
-[node name="RenderButton" type="Button" parent="UI"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -128.0
-offset_top = 32.0
-offset_right = -32.0
-offset_bottom = 69.0005
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 16
-text = "Render"
+[node name="PathTracingBase" parent="." instance=ExtResource("1_v8vns")]
 
 [node name="Scene" type="Node3D" parent="."]
 

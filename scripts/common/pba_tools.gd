@@ -1,7 +1,7 @@
 class_name PBATools
 
 
-static func pba_filled(size: int, value: int) -> PackedByteArray:
+static func pba_filled(size: int, value) -> PackedByteArray:
 	var pba = PackedByteArray()
 	pba.resize(size)
 	pba.fill(value)

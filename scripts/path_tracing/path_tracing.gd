@@ -16,7 +16,9 @@ signal rendered(texure: Texture, render_time: int)
 
 # GPU Compute vars
 var compute: GPUCompute
-var img_buffer: SBuffer
+
+var fixed_uset: USet
+var rendered_image: RDTexture
 var debug_buffer: SBuffer
 
 
@@ -25,7 +27,8 @@ func _enter_tree() -> void:
 	height = get_viewport().size.y
 	
 	assert(c_shader)
-	compute = GPUCompute.new(c_shader, width, height, 1)
+	compute = GPUCompute.new(c_shader, width / 8, height / 8, 1)
+	fixed_uset = create_fixed_uset()
 
 
 func _process(_delta: float) -> void:
@@ -36,25 +39,24 @@ func render() -> void:
 	assert(compute)
 	var msec = Time.get_ticks_msec()
 	
-	var uset = create_uset()
 	var glbs_uset = get_globals_uset()
 	var objects_uset = get_objects_uset()
-	compute.dispatch([uset, glbs_uset, objects_uset])
-	var texture = get_texure(compute.r_device.buffer_get_data(img_buffer.rid))
+	compute.dispatch([fixed_uset, glbs_uset, objects_uset])
+	var texture = get_texure(compute.r_device.texture_get_data(rendered_image.rid, 0))
 	
 	rendered.emit(texture, Time.get_ticks_msec() - msec)
 
 
-func create_uset() -> USet:
-	img_buffer = SBuffer.new(
-		compute.r_device, width * height * 16, # 4 channels (rgba) 4 bytes each
-		PackedByteArray(), 0 # binding
+func create_fixed_uset() -> USet:
+	rendered_image = RDTexture.new(
+		compute.r_device, Vector2i(width, height),
+		PBATools.pba_filled(width * height * 16, 0.0), 0 # binding
 	)
 	debug_buffer = SBuffer.new(
 		compute.r_device, debug_size * 4,
-		PBATools.pba_filled(debug_size * 4, 0), 1 # binding
+		PBATools.pba_filled(debug_size * 4, 0.0), 1 # binding
 	)
-	return USet.new(compute, [img_buffer.uniform, debug_buffer.uniform], 0)
+	return USet.new(compute, [rendered_image.uniform, debug_buffer.uniform], 0)
 
 
 func get_globals_uset() -> USet:

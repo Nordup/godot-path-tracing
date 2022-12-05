@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://dgpb6r3wf6jeu"
+path="res://.godot/imported/path_tracing.comp.glsl-1e1034b268583ce1b0147c05332468d6.res"
+
+[deps]
+
+source_file="res://shaders/path_tracing.comp.glsl"
+dest_files=["res://.godot/imported/path_tracing.comp.glsl-1e1034b268583ce1b0147c05332468d6.res"]
+
+[params]
+

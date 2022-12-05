@@ -30,6 +30,11 @@ _global_script_classes=[{
 "path": "res://scripts/path_tracing/path_tracing.gd"
 }, {
 "base": "RefCounted",
+"class": &"RDTexture",
+"language": &"GDScript",
+"path": "res://scripts/gpu_compute/rd_texture.gd"
+}, {
+"base": "RefCounted",
 "class": &"SBuffer",
 "language": &"GDScript",
 "path": "res://scripts/gpu_compute/storage_buffer.gd"
@@ -54,6 +59,7 @@ _global_script_class_icons={
 "GPUCompute": "",
 "PBATools": "",
 "PathTracing": "",
+"RDTexture": "",
 "SBuffer": "",
 "ShaderTools": "",
 "Sphere": "",

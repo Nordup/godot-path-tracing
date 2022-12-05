@@ -2,7 +2,7 @@
 #version 460
 
 
-layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 
 
 
@@ -32,10 +32,7 @@ struct Ray
 /* ====================== OUPUT BUFFERS ====================== */
 
 
-layout(set = 0, binding = 0, std430) restrict writeonly buffer ColorBuffer
-{
-	vec4 pixel[];
-} color_buffer;
+layout(set = 0, binding = 0, rgba32f) uniform image2D rendered_image;
 
 
 layout(set = 0, binding = 1, std430) restrict writeonly buffer DebugBuffer
@@ -87,10 +84,8 @@ const float REFR = 2;
 
 // Runtime global variables
 
-uint idx = gl_GlobalInvocationID.x;
-uint idy = gl_GlobalInvocationID.y;
-uint width = gl_NumWorkGroups.x;
-uint height = gl_NumWorkGroups.y;
+ivec2 inv_id = ivec2(gl_GlobalInvocationID.xy);
+ivec2 image_size = imageSize(rendered_image);
 
 
 
@@ -124,7 +119,7 @@ void print4(vec4 vec)
 
 // Main
 
-vec2 seed = vec2(idx, idy) + TicksMsec / 1000;
+vec2 seed = vec2(inv_id.x, inv_id.y) + TicksMsec / 1000;
 float rand()
 {
 	vec3 p3  = fract(vec3(seed.xyx) * .1031);
@@ -277,19 +272,19 @@ dvec3 radiance(Ray ray)
 }
 
 
-Ray get_cam_ray(uint idx, uint idy)
+Ray get_cam_ray()
 {
 	// TODO: randomize ray
 	float fovA = radians(camera.fov / 2);
 	float camX = sin(fovA);
 	float camZ = -cos(fovA);
-	float dX = 2 * camX / width;
+	float dX = 2 * camX / image_size.x;
 	float dY = dX;
-	float camY = (height / 2) * dY;
+	float camY = (image_size.y / 2) * dY;
 
 	vec3 baseRay = vec3(
-		-camX + dX * idx,
-		camY - dY * idy,
+		-camX + dX * inv_id.x,
+		camY - dY * inv_id.y,
 		camZ
 	);
 
@@ -301,14 +296,14 @@ Ray get_cam_ray(uint idx, uint idy)
 
 void main()
 {
-	Ray ray = get_cam_ray(idx, idy);
-	vec4 color = vec4(radiance(ray), 1);
-	color_buffer.pixel[idx + idy * width] = color;
+	Ray ray = get_cam_ray();
+	vec4 pixel = vec4(radiance(ray), 1);
+	imageStore(rendered_image, inv_id, pixel);
 
 
 	// Debug
 
-	if (idx == 0 && idy == 0)
+	if (inv_id.x == 0 && inv_id.y == 0)
 	{
 	}
 }
