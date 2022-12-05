@@ -1,4 +1,3 @@
-
 vec3 rotate_vector(vec3 vec, vec3 euler)
 {
 	mat4 rmat_x = mat4(

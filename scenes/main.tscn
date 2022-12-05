@@ -1,6 +1,7 @@
-[gd_scene load_steps=26 format=3 uid="uid://by21kjq1rn1bq"]
+[gd_scene load_steps=27 format=3 uid="uid://by21kjq1rn1bq"]
 
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing.gd" id="1_fydp6"]
+[ext_resource type="RDShaderFile" uid="uid://byxg7e2svxfsy" path="res://shaders/path_tracing.glsl" id="2_0w73j"]
 [ext_resource type="Script" path="res://scripts/path_tracing/ui.gd" id="2_45d46"]
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing_log.gd" id="2_x6p8m"]
 [ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
@@ -108,13 +109,14 @@ ambient_light_sky_contribution = 0.0
 
 [node name="PathTracing" type="Node" parent="."]
 script = ExtResource("1_fydp6")
-comp_shader = "res://shaders/path_tracing.comp"
+c_shader = ExtResource("2_0w73j")
 debug_size = 100
 loop = true
 
-[node name="DebugLog" type="Node" parent="PathTracing"]
+[node name="DebugLog" type="Node" parent="PathTracing" node_paths=PackedStringArray("path_tracing")]
 script = ExtResource("2_x6p8m")
 debug_mode = 0
+path_tracing = NodePath("..")
 
 [node name="UI" type="Control" parent="." node_paths=PackedStringArray("path_tracing")]
 layout_mode = 3

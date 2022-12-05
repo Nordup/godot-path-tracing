@@ -2,7 +2,7 @@ extends Node
 class_name PathTracing
 
 # Export vars
-@export_file var comp_shader
+@export var c_shader: RDShaderFile
 @export var debug_size: int
 @export_range(3, 10) var ray_depth: int = 5
 @export var loop: bool
@@ -24,8 +24,7 @@ func _enter_tree() -> void:
 	width = get_viewport().size.x
 	height = get_viewport().size.y
 	
-	assert(comp_shader)
-	var c_shader = FileTools.get_file_text(comp_shader)
+	assert(c_shader)
 	compute = GPUCompute.new(c_shader, width, height, 1)
 
 
@@ -55,7 +54,7 @@ func create_uset() -> USet:
 		compute.r_device, debug_size * 4,
 		PBATools.pba_filled(debug_size * 4, 0), 1 # binding
 	)
-	return USet.new(compute, [img_buffer.uniform,debug_buffer.uniform], 0)
+	return USet.new(compute, [img_buffer.uniform, debug_buffer.uniform], 0)
 
 
 func get_globals_uset() -> USet:

@@ -15,16 +15,6 @@ _global_script_classes=[{
 "path": "res://scripts/objects/camera.gd"
 }, {
 "base": "RefCounted",
-"class": &"ComputePipeline",
-"language": &"GDScript",
-"path": "res://scripts/gpu_compute/compute_pipeline.gd"
-}, {
-"base": "RefCounted",
-"class": &"FileTools",
-"language": &"GDScript",
-"path": "res://scripts/common/file_tools.gd"
-}, {
-"base": "RefCounted",
 "class": &"GPUCompute",
 "language": &"GDScript",
 "path": "res://scripts/gpu_compute/gpu_compute.gd"
@@ -61,8 +51,6 @@ _global_script_classes=[{
 }]
 _global_script_class_icons={
 "Camera": "",
-"ComputePipeline": "",
-"FileTools": "",
 "GPUCompute": "",
 "PBATools": "",
 "PathTracing": "",

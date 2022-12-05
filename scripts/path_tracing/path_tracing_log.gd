@@ -1,13 +1,13 @@
 extends Node
 
 @export var debug_mode: DebugTools.DebugMode
-@onready var path_tracing = get_parent() as PathTracing
+@export var path_tracing: PathTracing
 
 
 func _ready() -> void:
 	DebugTools.set_mode(debug_mode)
 	var c_pipeline_is_valid = path_tracing.compute.r_device.compute_pipeline_is_valid(
-		path_tracing.compute.c_pipeline.rid
+		path_tracing.compute.pipeline_rid
 	)
 	DebugTools.print_quiet("Compute pipeline valid: " + str(c_pipeline_is_valid))
 	DebugTools.print_quiet("Rendering " + str(path_tracing.width) + "x" + str(path_tracing.height))

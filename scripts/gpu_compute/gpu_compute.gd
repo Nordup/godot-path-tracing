@@ -6,22 +6,27 @@ var y_groups: int
 var z_groups: int
 
 var r_device: RenderingDevice
-var c_pipeline: ComputePipeline
+var shader_rid: RID
+var pipeline_rid: RID
 
 
-func _init(c_shader: String, x: int, y: int, z: int) -> void:
+func _init(c_shader: RDShaderFile, x: int, y: int, z: int) -> void:
 	x_groups = x
 	y_groups = y
 	z_groups = z
 	
+	var shader_spirv: RDShaderSPIRV = c_shader.get_spirv()
+	ShaderTools.print_all_compile_errors(shader_spirv)
+	
 	r_device = RenderingServer.create_local_rendering_device()
-	c_pipeline = ComputePipeline.new(r_device, c_shader)
+	shader_rid = r_device.shader_create_from_spirv(shader_spirv)
+	pipeline_rid = r_device.compute_pipeline_create(shader_rid)
 
 
 func dispatch(uniform_sets):
 	uniform_sets = uniform_sets as Array[USet]
 	var c_list = r_device.compute_list_begin()
-	r_device.compute_list_bind_compute_pipeline(c_list, c_pipeline.rid)
+	r_device.compute_list_bind_compute_pipeline(c_list, pipeline_rid)
 	
 	for i in range(uniform_sets.size()):
 		if r_device.uniform_set_is_valid(uniform_sets[i].rid):
