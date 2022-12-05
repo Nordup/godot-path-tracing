@@ -116,7 +116,7 @@ loop = true
 script = ExtResource("2_x6p8m")
 debug_mode = 0
 
-[node name="UI" type="Control" parent="."]
+[node name="UI" type="Control" parent="." node_paths=PackedStringArray("path_tracing")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -124,10 +124,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_45d46")
-path_tracing_node = NodePath("../PathTracing")
+path_tracing = NodePath("../PathTracing")
 
 [node name="RenderedImage" type="TextureRect" parent="UI"]
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -136,7 +135,6 @@ grow_vertical = 2
 stretch_mode = 1
 
 [node name="FpsValueLabel" type="Label" parent="UI"]
-layout_mode = 0
 offset_left = 168.0
 offset_top = 32.0
 offset_right = 207.998
@@ -144,7 +142,6 @@ offset_bottom = 58.0
 text = "0"
 
 [node name="FpsTextLabel" type="Label" parent="UI/FpsValueLabel"]
-layout_mode = 0
 offset_left = -142.0
 offset_right = -9.0
 offset_bottom = 26.0
@@ -155,13 +152,11 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 text = " PathTracing FPS:"
 
 [node name="Panel" type="Panel" parent="UI/FpsValueLabel"]
-layout_mode = 0
 offset_left = -148.0
 offset_right = 40.0
 offset_bottom = 26.0
 
 [node name="RenderButton" type="Button" parent="UI"]
-layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0

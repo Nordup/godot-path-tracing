@@ -31,13 +31,13 @@ struct Ray
 /* ====================== OUPUT BUFFERS ====================== */
 
 
-layout(set = 0, binding = 0, std430) buffer ColorBuffer
+layout(set = 0, binding = 0, std430) restrict writeonly buffer ColorBuffer
 {
 	vec4 pixel[];
 } color_buffer;
 
 
-layout(set = 0, binding = 1, std430) buffer DebugBuffer
+layout(set = 0, binding = 1, std430) restrict writeonly buffer DebugBuffer
 {
 	float data[];
 } debug_buffer;
@@ -48,14 +48,14 @@ layout(set = 0, binding = 1, std430) buffer DebugBuffer
 /* ====================== INPUT BUFFERS ====================== */
 
 
-layout(set = 1, binding = 0, std430) buffer Globals
+layout(set = 1, binding = 0, std430) restrict readonly buffer Globals
 {
 	float Depth;
 	float TicksMsec;
 };
 
 
-layout(set = 2, binding = 0, std430) buffer Camera
+layout(set = 2, binding = 0, std430) restrict readonly buffer Camera
 {
 	vec4 pos;
 	vec4 rot;
@@ -63,7 +63,7 @@ layout(set = 2, binding = 0, std430) buffer Camera
 } camera;
 
 
-layout(set = 2, binding = 1, std430) buffer SphereBuffer
+layout(set = 2, binding = 1, std430) restrict readonly buffer SphereBuffer
 {
 	Sphere[] sphere;
 } sphere_buffer;

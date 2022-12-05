@@ -1,10 +1,9 @@
-[gd_scene load_steps=19 format=3 uid="uid://dr11j63uh18fo"]
+[gd_scene load_steps=18 format=3 uid="uid://dr11j63uh18fo"]
 
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing.gd" id="1_fydp6"]
 [ext_resource type="Script" path="res://scripts/path_tracing/ui.gd" id="2_45d46"]
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing_log.gd" id="2_x6p8m"]
 [ext_resource type="Script" path="res://scripts/objects/camera.gd" id="3_0b2li"]
-[ext_resource type="Texture2D" uid="uid://3x1jokdiem0q" path="res://res/icon.png" id="4_ybsml"]
 [ext_resource type="Script" path="res://scripts/objects/sphere.gd" id="6_trha7"]
 
 [sub_resource type="Theme" id="Theme_atioi"]
@@ -70,12 +69,13 @@ ambient_light_sky_contribution = 0.0
 script = ExtResource("1_fydp6")
 comp_shader = "res://shaders/path_tracing.comp"
 debug_size = 100
+loop = true
 
 [node name="DebugLog" type="Node" parent="PathTracing"]
 script = ExtResource("2_x6p8m")
 debug_mode = 1
 
-[node name="UI" type="Control" parent="."]
+[node name="UI" type="Control" parent="." node_paths=PackedStringArray("path_tracing")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -83,17 +83,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_45d46")
+path_tracing = NodePath("../PathTracing")
 
 [node name="RenderedImage" type="TextureRect" parent="UI"]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_ybsml")
 stretch_mode = 1
 
 [node name="FpsValueLabel" type="Label" parent="UI"]
+layout_mode = 0
 offset_left = 168.0
 offset_top = 32.0
 offset_right = 207.998
@@ -101,6 +103,7 @@ offset_bottom = 58.0
 text = "0"
 
 [node name="FpsTextLabel" type="Label" parent="UI/FpsValueLabel"]
+layout_mode = 0
 offset_left = -142.0
 offset_right = -9.0
 offset_bottom = 26.0
@@ -111,11 +114,13 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 text = " PathTracing FPS:"
 
 [node name="Panel" type="Panel" parent="UI/FpsValueLabel"]
+layout_mode = 0
 offset_left = -148.0
 offset_right = 40.0
 offset_bottom = 26.0
 
 [node name="RenderButton" type="Button" parent="UI"]
+layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0

@@ -1,8 +1,7 @@
 extends Control
 
-@export_node_path var path_tracing_node
+@export var path_tracing: PathTracing
 
-@onready var path_tracing = get_node(path_tracing_node) as PathTracing
 @onready var texture_rect = $RenderedImage as TextureRect
 @onready var fps = $FpsValueLabel as Label
 @onready var button = $RenderButton as Button
