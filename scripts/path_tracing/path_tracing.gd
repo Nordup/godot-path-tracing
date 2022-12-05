@@ -4,7 +4,7 @@ class_name PathTracing
 # Export vars
 @export var c_shader: RDShaderFile
 @export var debug_size: int
-@export_range(3, 10) var ray_depth: int = 5
+@export_range(2, 10) var ray_depth: int = 5
 @export var loop: bool
 
 # Consts

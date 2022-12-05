@@ -84,7 +84,11 @@ gdscript/warnings/integer_division=false
 
 [display]
 
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 window/size/resizable=false
+window/size/window_width_override=1280
+window/size/window_height_override=720
 
 [input]
 

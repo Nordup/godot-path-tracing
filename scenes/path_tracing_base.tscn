@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://dgjw0ngysp8ye"]
+[gd_scene load_steps=7 format=3 uid="uid://dgjw0ngysp8ye"]
 
 [ext_resource type="Script" path="res://scripts/path_tracing/free_look_camera.gd" id="1_cfb3k"]
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing.gd" id="1_va7si"]
 [ext_resource type="RDShaderFile" uid="uid://dgpb6r3wf6jeu" path="res://shaders/path_tracing.comp.glsl" id="2_gh3y4"]
 [ext_resource type="Script" path="res://scripts/path_tracing/path_tracing_log.gd" id="3_q0ueh"]
 [ext_resource type="Script" path="res://scripts/path_tracing/ui.gd" id="4_a5afx"]
+[ext_resource type="Script" path="res://scripts/path_tracing/ray_depth.gd" id="6_30qrt"]
 
 [node name="PathTracingBase" type="Node" node_paths=PackedStringArray("path_tracing")]
 script = ExtResource("1_cfb3k")
@@ -58,6 +59,36 @@ text = "FPS: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
+
+[node name="RayDepth" type="Panel" parent="UI" node_paths=PackedStringArray("path_tracing", "slider", "label")]
+offset_left = 32.0
+offset_top = 85.0
+offset_right = 152.0
+offset_bottom = 111.0
+script = ExtResource("6_30qrt")
+path_tracing = NodePath("../../PathTracing")
+slider = NodePath("HSlider")
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="UI/RayDepth"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Ray depth:"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="HSlider" type="HSlider" parent="UI/RayDepth"]
+offset_top = 26.0
+offset_right = 120.0
+offset_bottom = 56.0
+min_value = 2.0
+max_value = 10.0
+value = 2.0
+rounded = true
 
 [node name="MovementHint" type="Panel" parent="UI"]
 anchors_preset = 2

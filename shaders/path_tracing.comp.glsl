@@ -174,7 +174,7 @@ dvec3 radiance(Ray ray)
 	dvec3 cl = dvec3(0); // accumulated color
 	dvec3 cf = dvec3(1); // accumulated reflectance
 
-	int unroll = int(Depth) * 5; // Shader compilation loop unrolling
+	int unroll = int(Depth); // Shader compilation loop unrolling
 	while (unroll-- > 0)
 	{
 		if (!intersect(ray, t, id))
