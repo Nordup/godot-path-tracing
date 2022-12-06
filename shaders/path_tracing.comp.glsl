@@ -159,7 +159,7 @@ float intersect_plane(const Ray ray, const Object pln)
 {
 	// returns distance, 0 if nohit
 	// (t*RayDir + RayPos - PlnPos) x PlnNorm = 0 
-	vec3 normal = pln.value.xyz;
+	vec3 normal = normalize(pln.value.xyz);
 
 	float eps = 1e-4;
 	float t = -dot(ray.pos.xyz - pln.pos.xyz, normal) / dot(ray.dir, normal);
@@ -203,9 +203,12 @@ vec3 radiance(Ray ray)
 		if (!intersect(ray, t, id))
 			return cl;
 		const Object obj = objects.obj[id];
-
 		vec3 hit = ray.pos + ray.dir * t; // hit point
-		vec3 n = normalize(hit - obj.pos.xyz);					// TODO: get normal for different types of objects
+		
+		vec3 n;
+		if (obj.type == SPHERE) n = normalize(hit - obj.pos.xyz);
+		else n = normalize(obj.value.xyz);
+		
 		vec3 nl = dot(n, ray.dir) < 0 ? n : n * -1;
 		vec3 f = obj.clr.xyz;
 		float p = max(max(f.x, f.y), f.z); // max refl
