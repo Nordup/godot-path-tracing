@@ -10,12 +10,12 @@ func _ready() -> void:
 	slider.value = path_tracing.ray_depth
 
 
-func _on_value_changed(value: float) -> void:
-	path_tracing.ray_depth = slider.value
+func _on_value_changed(value) -> void:
+	path_tracing.ray_depth = value
 	path_tracing.clear_samples()
 	slider.release_focus()
 	set_text(value)
 
 
-func set_text(value: int) -> void:
+func set_text(value) -> void:
 	label.text = "Ray depth: %d" % value
