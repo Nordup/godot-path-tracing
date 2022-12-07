@@ -207,7 +207,7 @@ vec3 radiance(Ray ray)
 		
 		vec3 n;
 		if (obj.type == SPHERE) n = normalize(hit - obj.pos.xyz);
-		else n = normalize(obj.value.xyz);
+		else if (obj.type == PLANE) n = normalize(obj.value.xyz);
 		
 		vec3 nl = dot(n, ray.dir) < 0 ? n : n * -1;
 		vec3 f = obj.clr.xyz;
