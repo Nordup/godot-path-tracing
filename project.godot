@@ -29,6 +29,11 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://scripts/path_tracing/path_tracing.gd"
 }, {
+"base": "Sphere",
+"class": &"Plane",
+"language": &"GDScript",
+"path": "res://scripts/path_tracing/objects/plane.gd"
+}, {
 "base": "RefCounted",
 "class": &"RDTexture",
 "language": &"GDScript",
@@ -59,6 +64,7 @@ _global_script_class_icons={
 "GPUCompute": "",
 "PBATools": "",
 "PathTracing": "",
+"Plane": "",
 "RDTexture": "",
 "SBuffer": "",
 "ShaderTools": "",
