@@ -1,8 +1,8 @@
 # godot-path-tracing
 
-Simple pathtracing implementation in Godot 4 (beta). With free look camera at 10 fps (gtx 1050 mobile)
+Simple pathtracing implementation in Godot 4 (beta). With free look camera at 20-40 fps (gtx 1050 mobile)
 
-You can use godot editor to describe scenes: place the camera, add spheres, set their colors etc.
+You can use godot editor to describe scenes: place the camera, add sphere/plane, set their colors etc.
 <br/><br/>
 
 Ported c++ code from https://www.kevinbeason.com/smallpt
