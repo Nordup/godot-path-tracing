@@ -20,7 +20,7 @@ static func encode_number(x: float, y: float, z: float, w: float) -> PackedByteA
 
 static func encode_float(f: float) -> PackedByteArray:
 	var pba = PackedByteArray()
-	pba.resize(1 * 4) # 4 float 4 bytes
+	pba.resize(4)
 	pba.encode_float(0, f)
 	return pba
 

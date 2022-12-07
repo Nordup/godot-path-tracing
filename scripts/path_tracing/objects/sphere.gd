@@ -8,6 +8,12 @@ class SphereStruct:
 	var ems: Color
 	var refl: ReflType
 
+enum ObjectType
+{
+	Sphere,
+	Plane
+}
+
 enum ReflType { Diffuse, Specular, Refractive }
 @export var radius: float
 @export_color_no_alpha var color: Color
@@ -33,6 +39,7 @@ func update_data() -> void:
 func get_data() -> PackedByteArray:
 	update_data()
 	var pba = PackedByteArray()
+	pba.append_array(PBATools.encode_float_x4(ObjectType.Sphere))
 	pba.append_array(PBATools.encode_vec3(sphere.pos))
 	pba.append_array(PBATools.encode_float_x4(sphere.rad))
 	pba.append_array(PBATools.encode_color(sphere.clr))
