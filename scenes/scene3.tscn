@@ -1,0 +1,685 @@
+[gd_scene load_steps=15 format=3 uid="uid://bxnx0p7kyaysy"]
+
+[ext_resource type="PackedScene" uid="uid://dgjw0ngysp8ye" path="res://scenes/path_tracing_base.tscn" id="1_850j8"]
+[ext_resource type="Script" path="res://scripts/path_tracing/objects/camera.gd" id="2_adycs"]
+[ext_resource type="Script" path="res://scripts/path_tracing/objects/plane.gd" id="3_pr215"]
+[ext_resource type="Script" path="res://scripts/path_tracing/objects/sphere.gd" id="4_gugou"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_54c8f"]
+size = Vector2(1000, 1000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqybl"]
+metallic = 1.0
+metallic_specular = 1.0
+roughness = 0.0
+emission = Color(0.564706, 0.305882, 0.407843, 1)
+emission_energy_multiplier = 3.39
+
+[sub_resource type="SphereMesh" id="SphereMesh_28jwi"]
+material = SubResource("StandardMaterial3D_vqybl")
+radius = 1.0
+height = 2.0
+radial_segments = 30
+rings = 10
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3d63t"]
+albedo_color = Color(0, 0, 0, 0.184314)
+emission = Color(0.564706, 0.305882, 0.407843, 1)
+emission_energy_multiplier = 3.39
+refraction_enabled = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_fx4ml"]
+material = SubResource("StandardMaterial3D_3d63t")
+radius = 1.0
+height = 2.0
+radial_segments = 30
+rings = 20
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yfv6p"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_ipv1x"]
+material = SubResource("StandardMaterial3D_yfv6p")
+flip_faces = true
+radius = 100.0
+height = 200.0
+radial_segments = 30
+rings = 100
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tt8sc"]
+sky_top_color = Color(0.309804, 0.654902, 0.976471, 1)
+
+[sub_resource type="Sky" id="Sky_ugkc1"]
+sky_material = SubResource("ProceduralSkyMaterial_tt8sc")
+
+[sub_resource type="Environment" id="Environment_ugo1d"]
+background_mode = 2
+background_color = Color(1, 1, 1, 1)
+sky = SubResource("Sky_ugkc1")
+ambient_light_sky_contribution = 0.0
+
+[node name="Main" type="Node3D"]
+
+[node name="PathTracingBase" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("1_850j8")]
+camera = NodePath("../Scene/Camera3D")
+
+[node name="Scene" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 0.995884, 0.0906326, 0, -0.0906326, 0.995884, 0, 2.423, 6.47)
+top_level = true
+keep_aspect = 0
+script = ExtResource("2_adycs")
+
+[node name="Botm" type="MeshInstance3D" parent="Scene"]
+top_level = true
+mesh = SubResource("PlaneMesh_54c8f")
+script = ExtResource("3_pr215")
+norm = Vector3(0, 1, 0)
+color = Color(0.239216, 0.203922, 0.176471, 1)
+reflection_type = 0
+
+[node name="Mirr" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.36126, 2.54666, 1.40576)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr2" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55089, 1, 1.40576)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr3" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.36126, 1, 4.17099)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr4" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55089, 2.54666, 4.17099)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr5" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.92162, 2.54666, 1.40576)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr6" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11125, 1, 1.40576)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr7" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.92162, 1, 4.17099)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr8" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11125, 2.54666, 4.17099)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr9" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.36126, 2.54666, 6.92122)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr10" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55089, 1, 6.92122)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr11" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.36126, 1, 9.68645)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr12" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55089, 2.54666, 9.68645)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr13" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.92162, 2.54666, 6.92122)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr14" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11125, 1, 6.92122)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr15" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.92162, 1, 9.68645)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr16" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11125, 2.54666, 9.68645)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr17" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.86407, 2.54666, 1.40576)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr18" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.67444, 1, 1.40576)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr19" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.86407, 1, 4.17099)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr20" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.67444, 2.54666, 4.17099)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr21" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30371, 2.54666, 1.40576)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr22" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.11408, 1, 1.40576)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr23" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30371, 1, 4.17099)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr24" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.11408, 2.54666, 4.17099)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr25" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.86407, 2.54666, 6.92122)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr26" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.67444, 1, 6.92122)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr27" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.86407, 1, 9.68645)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr28" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.67444, 2.54666, 9.68645)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr29" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30371, 2.54666, 6.92122)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr30" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.11408, 1, 6.92122)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr31" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30371, 1, 9.68645)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr32" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.11408, 2.54666, 9.68645)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr33" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.36126, 2.54666, -9.78248)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr34" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55089, 1, -9.78248)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr35" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.36126, 1, -7.01725)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr36" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55089, 2.54666, -7.01725)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr37" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.92162, 2.54666, -9.78248)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr38" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11125, 1, -9.78248)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr39" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.92162, 1, -7.01725)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr40" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11125, 2.54666, -7.01725)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr41" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.36126, 2.54666, -4.26702)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr42" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55089, 1, -4.26702)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr43" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.36126, 1, -1.50179)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr44" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55089, 2.54666, -1.50179)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr45" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.92162, 2.54666, -4.26702)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr46" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11125, 1, -4.26702)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr47" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.92162, 1, -1.50179)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr48" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11125, 2.54666, -1.50179)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr49" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.86407, 2.54666, -9.78248)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr50" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.67444, 1, -9.78248)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr51" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.86407, 1, -7.01725)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr52" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.67444, 2.54666, -7.01725)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr53" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30371, 2.54666, -9.78248)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr54" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.11408, 1, -9.78248)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr55" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30371, 1, -7.01725)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr56" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.11408, 2.54666, -7.01725)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr57" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.86407, 2.54666, -4.26702)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr58" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.67444, 1, -4.26702)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr59" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.86407, 1, -1.50179)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr60" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.67444, 2.54666, -1.50179)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr61" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30371, 2.54666, -4.26702)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr62" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.11408, 1, -4.26702)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr63" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30371, 1, -1.50179)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Mirr64" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.11408, 2.54666, -1.50179)
+top_level = true
+mesh = SubResource("SphereMesh_28jwi")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 1, 1, 1)
+reflection_type = 2
+
+[node name="Glas" type="MeshInstance3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.24684, 0)
+top_level = true
+mesh = SubResource("SphereMesh_fx4ml")
+script = ExtResource("4_gugou")
+radius = 1.0
+color = Color(1, 0.929412, 0, 1)
+reflection_type = 1
+
+[node name="Lite" type="MeshInstance3D" parent="Scene"]
+top_level = true
+mesh = SubResource("SphereMesh_ipv1x")
+script = ExtResource("4_gugou")
+radius = 100.0
+color = Color(0.106, 0.332133, 0.53, 1)
+emission = Color(1, 1, 1, 1)
+reflection_type = 0
+
+[node name="Env" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Env"]
+environment = SubResource("Environment_ugo1d")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Env"]
+transform = Transform3D(0.845986, -0.191493, -0.497633, 0.52273, 0.481945, 0.703194, 0.105175, -0.85502, 0.507818, 7.30817, 1.78789, 0)
