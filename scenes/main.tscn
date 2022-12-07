@@ -1,66 +1,39 @@
-[gd_scene load_steps=23 format=3 uid="uid://by21kjq1rn1bq"]
+[gd_scene load_steps=21 format=3 uid="uid://by21kjq1rn1bq"]
 
 [ext_resource type="PackedScene" uid="uid://dgjw0ngysp8ye" path="res://scenes/path_tracing_base.tscn" id="1_hg4oq"]
 [ext_resource type="Script" path="res://scripts/path_tracing/objects/camera.gd" id="3_0b2li"]
+[ext_resource type="Script" path="res://scripts/path_tracing/objects/plane.gd" id="3_1amf6"]
 [ext_resource type="Script" path="res://scripts/path_tracing/objects/sphere.gd" id="6_trha7"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ds1bn"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8cwqs"]
 albedo_color = Color(0.188235, 0.176471, 0.741176, 1)
-emission = Color(0.564706, 0.305882, 0.407843, 1)
-emission_energy_multiplier = 3.39
 
-[sub_resource type="SphereMesh" id="SphereMesh_st7ul"]
-material = SubResource("StandardMaterial3D_ds1bn")
-radial_segments = 100
-rings = 700
+[sub_resource type="PlaneMesh" id="PlaneMesh_y3i3m"]
+material = SubResource("StandardMaterial3D_8cwqs")
+size = Vector2(100, 100)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pbejf"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_36f4n"]
 albedo_color = Color(0.772549, 0.231373, 0.266667, 1)
-emission = Color(0.564706, 0.305882, 0.407843, 1)
-emission_energy_multiplier = 3.39
 
-[sub_resource type="SphereMesh" id="SphereMesh_2bwro"]
-material = SubResource("StandardMaterial3D_pbejf")
-radial_segments = 100
-rings = 700
+[sub_resource type="PlaneMesh" id="PlaneMesh_4m05a"]
+material = SubResource("StandardMaterial3D_36f4n")
+size = Vector2(100, 100)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s4ryd"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_h88o7"]
+size = Vector2(100, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ugsxb"]
 albedo_color = Color(0.784314, 0.776471, 0.784314, 1)
-emission = Color(0.564706, 0.305882, 0.407843, 1)
-emission_energy_multiplier = 3.39
 
-[sub_resource type="SphereMesh" id="SphereMesh_i3o4h"]
-material = SubResource("StandardMaterial3D_s4ryd")
-radial_segments = 100
-rings = 600
+[sub_resource type="PlaneMesh" id="PlaneMesh_w08fk"]
+material = SubResource("StandardMaterial3D_ugsxb")
+size = Vector2(100, 100)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_25jde"]
-albedo_color = Color(0, 0, 0, 1)
-emission = Color(0.564706, 0.305882, 0.407843, 1)
-emission_energy_multiplier = 3.39
+[sub_resource type="PlaneMesh" id="PlaneMesh_312kt"]
+size = Vector2(100, 100)
 
-[sub_resource type="SphereMesh" id="SphereMesh_i0jfn"]
-material = SubResource("StandardMaterial3D_25jde")
-rings = 500
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yh3ml"]
-albedo_color = Color(0.784314, 0.776471, 0.784314, 1)
-emission = Color(0.564706, 0.305882, 0.407843, 1)
-emission_energy_multiplier = 3.39
-
-[sub_resource type="SphereMesh" id="SphereMesh_7efqb"]
-material = SubResource("StandardMaterial3D_yh3ml")
-rings = 400
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wvm37"]
-albedo_color = Color(0.784314, 0.776471, 0.784314, 1)
-emission = Color(0.564706, 0.305882, 0.407843, 1)
-emission_energy_multiplier = 3.39
-
-[sub_resource type="SphereMesh" id="SphereMesh_y8ks5"]
-material = SubResource("StandardMaterial3D_wvm37")
-radial_segments = 50
-rings = 400
+[sub_resource type="PlaneMesh" id="PlaneMesh_abk8s"]
+size = Vector2(100, 100)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqybl"]
 metallic = 1.0
@@ -71,6 +44,8 @@ emission_energy_multiplier = 3.39
 
 [sub_resource type="SphereMesh" id="SphereMesh_28jwi"]
 material = SubResource("StandardMaterial3D_vqybl")
+radius = 1.0
+height = 2.0
 radial_segments = 30
 rings = 10
 
@@ -82,6 +57,8 @@ refraction_enabled = true
 
 [sub_resource type="SphereMesh" id="SphereMesh_fx4ml"]
 material = SubResource("StandardMaterial3D_3d63t")
+radius = 1.0
+height = 2.0
 radial_segments = 30
 rings = 20
 
@@ -93,6 +70,8 @@ emission_energy_multiplier = 12.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_ipv1x"]
 material = SubResource("StandardMaterial3D_yfv6p")
+radius = 10.0
+height = 20.0
 radial_segments = 30
 rings = 100
 
@@ -114,55 +93,55 @@ keep_aspect = 0
 script = ExtResource("3_0b2li")
 
 [node name="Right" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, 100003, 0, 0)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 3, 0, 0)
 top_level = true
-mesh = SubResource("SphereMesh_st7ul")
-script = ExtResource("6_trha7")
-radius = 100000.0
+mesh = SubResource("PlaneMesh_y3i3m")
+script = ExtResource("3_1amf6")
+norm = Vector3(-1, 0, 0)
 color = Color(0.188235, 0.176471, 0.741176, 1)
 reflection_type = 0
 
 [node name="Left" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, -100003, 0, 0)
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -3, 0, 0)
 top_level = true
-mesh = SubResource("SphereMesh_2bwro")
-script = ExtResource("6_trha7")
-radius = 100000.0
+mesh = SubResource("PlaneMesh_4m05a")
+script = ExtResource("3_1amf6")
+norm = Vector3(1, 0, 0)
 color = Color(0.772549, 0.231373, 0.266667, 1)
 reflection_type = 0
 
 [node name="Front" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, 0, 0, -100003)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -4)
 top_level = true
-mesh = SubResource("SphereMesh_i3o4h")
-script = ExtResource("6_trha7")
-radius = 100000.0
+mesh = SubResource("PlaneMesh_h88o7")
+script = ExtResource("3_1amf6")
+norm = Vector3(0, 0, 1)
 color = Color(0.784314, 0.776471, 0.784314, 1)
 reflection_type = 0
 
 [node name="Back" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, 0, 0, 100011)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 11)
 top_level = true
-mesh = SubResource("SphereMesh_i0jfn")
-script = ExtResource("6_trha7")
-radius = 100000.0
+mesh = SubResource("PlaneMesh_w08fk")
+script = ExtResource("3_1amf6")
+norm = Vector3(0, 0, -1)
+color = Color(0.784314, 0.776471, 0.784314, 1)
 reflection_type = 0
 
 [node name="Botm" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, 0, -100000, 0)
 top_level = true
-mesh = SubResource("SphereMesh_7efqb")
-script = ExtResource("6_trha7")
-radius = 100000.0
+mesh = SubResource("PlaneMesh_312kt")
+script = ExtResource("3_1amf6")
+norm = Vector3(0, 1, 0)
 color = Color(0.784314, 0.776471, 0.784314, 1)
 reflection_type = 0
 
 [node name="Top" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(100000, 0, 0, 0, 100000, 0, 0, 0, 100000, 0, 100004, 0)
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 4, 0)
 top_level = true
-mesh = SubResource("SphereMesh_y8ks5")
-script = ExtResource("6_trha7")
-radius = 100000.0
+mesh = SubResource("PlaneMesh_abk8s")
+script = ExtResource("3_1amf6")
+norm = Vector3(0, -1, 0)
 color = Color(0.784314, 0.776471, 0.784314, 1)
 reflection_type = 0
 
@@ -185,7 +164,7 @@ color = Color(1, 1, 1, 1)
 reflection_type = 2
 
 [node name="Lite" type="MeshInstance3D" parent="Scene"]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 13.932, -0.421)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.932, -0.421)
 top_level = true
 mesh = SubResource("SphereMesh_ipv1x")
 script = ExtResource("6_trha7")

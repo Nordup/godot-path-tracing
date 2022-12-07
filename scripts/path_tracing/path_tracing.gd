@@ -54,11 +54,11 @@ func render() -> void:
 func create_fixed_uset() -> USet:
 	rendered_image = RDTexture.new(
 		compute.r_device, Vector2i(width, height),
-		PBATools.pba_filled(width * height * 16, 0.0), 0 # binding
+		PBATools.pba_filled(width * height * 16, 0), 0 # binding
 	)
 	debug_buffer = SBuffer.new(
 		compute.r_device, debug_size * 4,
-		PBATools.pba_filled(debug_size * 4, 0.0), 1 # binding
+		PBATools.pba_filled(debug_size * 4, 0), 1 # binding
 	)
 	return USet.new(compute, [rendered_image.uniform, debug_buffer.uniform], 0)
 

@@ -10,20 +10,21 @@ layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 /* ====================== STRUCTS ====================== */
 
 
-struct Sphere
+struct Object
 {
+	float type; // object type (sphere, plane)
 	vec4 pos;
-	float rad;
+	vec4 value; // float radius (sphere), vec3 normal (plane)
 	vec4 clr;
 	vec4 ems; // emission
-	float refl; // reflection type (DIFFuse, SPECular, REFRactive)
+	float refl; // reflection type (diffuse, specular, refractive)
 };
 
 
 struct Ray
 {
-	dvec3 pos;
-	dvec3 dir;
+	vec3 pos;
+	vec3 dir;
 };
 
 
@@ -62,10 +63,10 @@ layout(set = 2, binding = 0, std430) restrict readonly buffer Camera
 } camera;
 
 
-layout(set = 2, binding = 1, std430) restrict readonly buffer SphereBuffer
+layout(set = 2, binding = 1, std430) restrict readonly buffer ObjectBuffer
 {
-	Sphere[] sphere;
-} sphere_buffer;
+	Object[] obj;
+} objects;
 
 
 
@@ -74,18 +75,22 @@ layout(set = 2, binding = 1, std430) restrict readonly buffer SphereBuffer
 
 
 const float PI = 3.14159265358979323846;
+const float EPS = 1e-4;
 
 
 // Reflection type (DIFFuse, SPECular, REFRactive)
-
 const float DIFF = 0;
 const float SPEC = 1;
 const float REFR = 2;
 
+// Object type (SPHere, PLaNe)
+const float SPHERE = 0;
+const float PLANE = 1;
+
 
 // Runtime global variables
 
-ivec2 inv_id = ivec2(gl_GlobalInvocationID.xy);
+ivec2 invoc_id = ivec2(gl_GlobalInvocationID.xy);
 ivec2 image_size = imageSize(rendered_image);
 
 
@@ -120,7 +125,7 @@ void print4(vec4 vec)
 
 // Main
 
-vec2 seed = vec2(inv_id.x, inv_id.y) + TicksMsec / 1000;
+vec2 seed = vec2(invoc_id.x, invoc_id.y) + TicksMsec / 1000;
 float rand()
 {
 	vec3 p3  = fract(vec3(seed.xyx) * .1031);
@@ -132,29 +137,47 @@ float rand()
 }
 
 
-double intersect_sphere(const Ray ray, const Sphere sph)
+float intersect_sphere(const Ray ray, const Object sph)
 {
 	// returns distance, 0 if nohit
 	// Solve t^2*d.d + 2*t*(o-p).d + (o-p).(o-p)-R^2 = 0
-	dvec3 op = sph.pos.xyz - ray.pos;
-	double t, eps = 1e-4;
-	double b = dot(op, ray.dir);
-	double det = b * b - dot(op, op) + sph.rad * sph.rad;
+	float radius = sph.value.x;
+
+	vec3 op = sph.pos.xyz - ray.pos;
+	float b = dot(op, ray.dir);
+	float det = b * b - dot(op, op) + radius * radius;
 	if (det < 0)
 		return 0;
 	else
 		det = sqrt(det);
-	return (t = b - det) > eps ? t : ((t = b + det) > eps ? t : 0);
+	float t;
+	return (t = b - det) > EPS ? t : ((t = b + det) > EPS ? t : 0);
 }
 
 
-bool intersect(const Ray ray, inout double t, inout int id)
+float intersect_plane(const Ray ray, const Object pln)
 {
-	double d;
-	double inf = t = 1e20;
-	for (int i = 0; i < sphere_buffer.sphere.length(); i++)
+	// returns distance, 0 if nohit
+	// (t*RayDir + RayPos - PlnPos) x PlnNorm = 0 
+	vec3 normal = normalize(pln.value.xyz);
+
+	float eps = 1e-4;
+	float t = -dot(ray.pos.xyz - pln.pos.xyz, normal) / dot(ray.dir, normal);
+	return t > eps ? t : 0;
+}
+
+
+bool intersect(const Ray ray, inout float t, inout int id)
+{
+	float d;
+	float inf = t = 1e20;
+	for (int i = 0; i < objects.obj.length(); i++)
 	{
-		d = intersect_sphere(ray, sphere_buffer.sphere[i]);
+		const Object obj = objects.obj[i];
+
+		if (obj.type == SPHERE) d = intersect_sphere(ray, obj);
+		else d = intersect_plane(ray, obj);
+		
 		if (d != 0 && d < t)
 		{
 			t = d;
@@ -165,29 +188,32 @@ bool intersect(const Ray ray, inout double t, inout int id)
 }
 
 
-dvec3 radiance(Ray ray)
+vec3 radiance(Ray ray)
 {
-	double t; // distance to intersection
+	float t; // distance to intersection
 	int id = 0; // id of intersected object
 	int depth = 0;
 
-	dvec3 cl = dvec3(0); // accumulated color
-	dvec3 cf = dvec3(1); // accumulated reflectance
+	vec3 cl = vec3(0); // accumulated color
+	vec3 cf = vec3(1); // accumulated reflectance
 
 	int unroll = int(Depth); // Shader compilation loop unrolling
 	while (unroll-- > 0)
 	{
 		if (!intersect(ray, t, id))
 			return cl;
-		const Sphere sph = sphere_buffer.sphere[id];
+		const Object obj = objects.obj[id];
+		vec3 hit = ray.pos + ray.dir * t; // hit point
+		
+		vec3 n;
+		if (obj.type == SPHERE) n = normalize(hit - obj.pos.xyz);
+		else if (obj.type == PLANE) n = normalize(obj.value.xyz);
+		
+		vec3 nl = dot(n, ray.dir) < 0 ? n : n * -1;
+		vec3 f = obj.clr.xyz;
+		float p = max(max(f.x, f.y), f.z); // max refl
 
-		dvec3 hit = ray.pos + ray.dir * t; // hit point
-		dvec3 n = normalize(hit - sph.pos.xyz);
-		dvec3 nl = dot(n, ray.dir) < 0 ? n : n * -1;
-		dvec3 f = sph.clr.xyz;
-		double p = max(max(f.x, f.y), f.z); // max refl
-
-		cl = cl + cf * sph.ems.xyz;
+		cl = cl + cf * obj.ems.xyz;
 		if (++depth > Depth)
 			if (rand() < p)
 				f = f * (1 / p);
@@ -195,7 +221,7 @@ dvec3 radiance(Ray ray)
 				return cl; // R.R.
 		cf = vec3(cf * f);
 
-		if (sph.refl == DIFF)
+		if (obj.refl == DIFF)
 		{
 			// Ideal DIFFUSE reflection
 
@@ -203,16 +229,16 @@ dvec3 radiance(Ray ray)
 			float r2 = rand();
 			float r2s = sqrt(r2);
 
-			dvec3 w = nl;
-			dvec3 u = normalize(cross((abs(w.x) > .1 ? vec3(0, 1, 0) : vec3(1, 0, 0)), w));
-			dvec3 v = cross(w, u);
-			dvec3 dir = normalize(u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2));
+			vec3 w = nl;
+			vec3 u = normalize(cross((abs(w.x) > .1 ? vec3(0, 1, 0) : vec3(1, 0, 0)), w));
+			vec3 v = cross(w, u);
+			vec3 dir = normalize(u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2));
 			
 			ray = Ray(hit, dir);
 
 			continue; // return sph.ems + f * radiance(Ray(hit,dir),depth,Xi);
 		}
-		else if (sph.refl == SPEC)
+		else if (obj.refl == SPEC)
 		{
 			// Ideal SPECULAR reflection
 
@@ -227,11 +253,11 @@ dvec3 radiance(Ray ray)
 			Ray reflRay = Ray(hit, ray.dir - n * 2 * dot(n, ray.dir));
 			bool into = dot(n, nl) > 0; // Ray from outside going in?
 			
-			double nc = 1;
-			double nt = 1.5;
-			double nnt = into ? nc / nt : nt / nc;
-			double ddn = dot(ray.dir, nl);
-			double cos2t;
+			float nc = 1;
+			float nt = 1.5;
+			float nnt = into ? nc / nt : nt / nc;
+			float ddn = dot(ray.dir, nl);
+			float cos2t;
 			
 			if ((cos2t = 1 - nnt * nnt * (1 - ddn * ddn)) < 0)
 			{
@@ -242,17 +268,17 @@ dvec3 radiance(Ray ray)
 				continue; // return sph.ems + f * radiance(reflRay,depth,Xi);
 			}
 
-			dvec3 tdir = normalize(ray.dir * nnt - n * ((into ? 1 : -1) * (ddn * nnt + sqrt(cos2t))));
+			vec3 tdir = normalize(ray.dir * nnt - n * ((into ? 1 : -1) * (ddn * nnt + sqrt(cos2t))));
 			
-			double a = nt - nc;
-			double b = nt + nc;
-			double R0 = a * a / (b * b);
-			double c = 1 - (into ? -ddn : dot(tdir, n));
-			double Re = R0 + (1 - R0) * c * c * c * c * c;
-			double Tr = 1 - Re;
-			double P = .25 + .5 * Re;
-			double RP = Re / P;
-			double TP = Tr / (1 - P);
+			float a = nt - nc;
+			float b = nt + nc;
+			float R0 = a * a / (b * b);
+			float c = 1 - (into ? -ddn : dot(tdir, n));
+			float Re = R0 + (1 - R0) * c * c * c * c * c;
+			float Tr = 1 - Re;
+			float P = .25 + .5 * Re;
+			float RP = Re / P;
+			float TP = Tr / (1 - P);
 			
 			if (rand() < P)
 			{
@@ -284,8 +310,8 @@ Ray get_cam_ray()
 	float camY = (image_size.y / 2) * dY;
 
 	vec3 baseRay = vec3(
-		-camX + dX * inv_id.x,
-		camY - dY * inv_id.y,
+		-camX + dX * invoc_id.x,
+		camY - dY * invoc_id.y,
 		camZ
 	);
 
@@ -303,18 +329,18 @@ void main()
 	// Add sample
 	if (SamplesCount != 0)
 	{
-		vec4 texel = imageLoad(rendered_image, inv_id);
+		vec4 texel = imageLoad(rendered_image, invoc_id);
 		vec4 a = texel * (SamplesCount - 1) / SamplesCount;
 		vec4 b = pixel * 1 / SamplesCount;
 		pixel = a + b;
 	}
 
-	imageStore(rendered_image, inv_id, pixel);
+	imageStore(rendered_image, invoc_id, pixel);
 
 
 	// Debug
 
-	if (inv_id.x == 0 && inv_id.y == 0)
+	if (invoc_id.x == 0 && invoc_id.y == 0)
 	{
 	}
 }
