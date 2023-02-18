@@ -10,6 +10,10 @@ Ported c++ code from https://www.kevinbeason.com/smallpt
 See other useful [resources](resources.md)
 <br/><br/>
 
+## Video
+
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/6A572N_bS_I/0.jpg)](http://www.youtube.com/watch?v=6A572N_bS_I "Path-tracing showcase Godot 4")
+
 ## Screenshots
 <br/>
 
@@ -17,3 +21,5 @@ See other useful [resources](resources.md)
 <br/><br/>
 
 <img src="screenshots/scene2.png">
+
+
