@@ -20,10 +20,10 @@ void sky()
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pmeqe"]
 shader = SubResource("Shader_hj76d")
-shader_parameter/sky_texture = SubResource("StreamTexture2D_x415j")
 shader_parameter/xr = -0.657
-shader_parameter/y = 1.0
 shader_parameter/yr = 0.0
+shader_parameter/y = 1.0
+shader_parameter/sky_texture = SubResource("StreamTexture2D_x415j")
 
 [sub_resource type="Sky" id="Sky_7xdod"]
 sky_material = SubResource("ShaderMaterial_pmeqe")

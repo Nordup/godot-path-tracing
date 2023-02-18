@@ -42,8 +42,8 @@ func render() -> void:
 	var msec = Time.get_ticks_msec()
 	
 	var glbs_uset = get_globals_uset()
-	var objects_uset = get_objects_uset()
-	compute.dispatch([fixed_uset, glbs_uset, objects_uset])
+	var primitives_uset = get_primitives_uset()
+	compute.dispatch([fixed_uset, glbs_uset, primitives_uset])
 	var rgbaf_pba = compute.r_device.texture_get_data(rendered_image.rid, 0)
 	var image = Image.create_from_data(width, height, false, Image.FORMAT_RGBAF, rgbaf_pba)
 	samples_count += 1
@@ -60,7 +60,7 @@ func create_fixed_uset() -> USet:
 		compute.r_device, debug_size * 4,
 		PBATools.pba_filled(debug_size * 4, 0), 1 # binding
 	)
-	return USet.new(compute, [rendered_image.uniform, debug_buffer.uniform], 0)
+	return USet.new(compute, [rendered_image.uniform, debug_buffer.uniform] as Array[RDUniform], 0)
 
 
 func get_globals_uset() -> USet:
@@ -69,15 +69,15 @@ func get_globals_uset() -> USet:
 	pba.append_array(PBATools.encode_float(Time.get_ticks_msec()))
 	pba.append_array(PBATools.encode_float(samples_count))
 	var glbs_buffer = SBuffer.new(compute.r_device, pba.size(), pba, 0)
-	return USet.new(compute, [glbs_buffer.uniform], 1)
+	return USet.new(compute, [glbs_buffer.uniform] as Array[RDUniform], 1)
 
 
-func get_objects_uset() -> USet:
+func get_primitives_uset() -> USet:
 	var cam_pba = SceneCollector.camera_pba()
 	var cam_buffer = SBuffer.new(compute.r_device, cam_pba.size(), cam_pba, 0)
-	var sph_pba = SceneCollector.spheres_pba()
-	var sph_buffer = SBuffer.new(compute.r_device, sph_pba.size(), sph_pba, 1)
-	return USet.new(compute, [cam_buffer.uniform, sph_buffer.uniform], 2)
+	var prim_pba = SceneCollector.primitives_pba()
+	var prim_buffer = SBuffer.new(compute.r_device, prim_pba.size(), prim_pba, 1)
+	return USet.new(compute, [cam_buffer.uniform, prim_buffer.uniform] as Array[RDUniform], 2)
 
 
 func clear_samples() -> void:

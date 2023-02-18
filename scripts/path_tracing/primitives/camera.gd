@@ -1,5 +1,5 @@
 extends Camera3D
-class_name Camera
+class_name CameraPrimitive
 
 class CameraStruct:
 	var pos: Vector3

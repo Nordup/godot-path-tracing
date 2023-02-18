@@ -1,5 +1,5 @@
-extends MeshInstance3D
-class_name Sphere
+extends Primitive
+class_name SpherePrimitive
 
 class SphereStruct:
 	var pos: Vector3
@@ -8,23 +8,13 @@ class SphereStruct:
 	var ems: Color
 	var refl: ReflType
 
-enum ObjectType
-{
-	Sphere,
-	Plane
-}
-
-enum ReflType { Diffuse, Specular, Refractive }
 @export var radius: float
-@export_color_no_alpha var color: Color
-@export_color_no_alpha var emission: Color
-@export var reflection_type: ReflType
 
 
 var sphere: SphereStruct
 
 func _ready() -> void:
-	SceneCollector.add_sphere(self)
+	SceneCollector.add_prim(self)
 
 
 func update_data() -> void:
@@ -39,7 +29,7 @@ func update_data() -> void:
 func get_data() -> PackedByteArray:
 	update_data()
 	var pba = PackedByteArray()
-	pba.append_array(PBATools.encode_float_x4(ObjectType.Sphere))
+	pba.append_array(PBATools.encode_float_x4(PrimitiveType.Sphere))
 	pba.append_array(PBATools.encode_vec3(sphere.pos))
 	pba.append_array(PBATools.encode_float_x4(sphere.rad))
 	pba.append_array(PBATools.encode_color(sphere.clr))
@@ -49,4 +39,4 @@ func get_data() -> PackedByteArray:
 
 
 func _exit_tree() -> void:
-	SceneCollector.remove_sphere(self)
+	SceneCollector.remove_prim(self)

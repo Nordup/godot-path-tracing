@@ -1,9 +1,9 @@
 [gd_scene load_steps=17 format=3 uid="uid://dr11j63uh18fo"]
 
 [ext_resource type="PackedScene" uid="uid://dgjw0ngysp8ye" path="res://scenes/path_tracing_base.tscn" id="1_v8vns"]
-[ext_resource type="Script" path="res://scripts/path_tracing/objects/camera.gd" id="3_0b2li"]
-[ext_resource type="Script" path="res://scripts/path_tracing/objects/plane.gd" id="3_lemwu"]
-[ext_resource type="Script" path="res://scripts/path_tracing/objects/sphere.gd" id="6_trha7"]
+[ext_resource type="Script" path="res://scripts/path_tracing/primitives/camera.gd" id="2_gfoal"]
+[ext_resource type="Script" path="res://scripts/path_tracing/primitives/plane.gd" id="3_oa1ee"]
+[ext_resource type="Script" path="res://scripts/path_tracing/primitives/sphere.gd" id="4_3llcq"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_54c8f"]
 size = Vector2(1000, 1000)
@@ -81,12 +81,12 @@ camera = NodePath("../Scene/Camera3D")
 transform = Transform3D(1, 0, 0, 0, 0.995884, 0.0906326, 0, -0.0906326, 0.995884, 0, 2.423, 6.47)
 top_level = true
 keep_aspect = 0
-script = ExtResource("3_0b2li")
+script = ExtResource("2_gfoal")
 
 [node name="Botm" type="MeshInstance3D" parent="Scene"]
 top_level = true
 mesh = SubResource("PlaneMesh_54c8f")
-script = ExtResource("3_lemwu")
+script = ExtResource("3_oa1ee")
 norm = Vector3(0, 1, 0)
 color = Color(0.239216, 0.203922, 0.176471, 1)
 reflection_type = 0
@@ -95,7 +95,7 @@ reflection_type = 0
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 4.006, 2, -4.027)
 top_level = true
 mesh = SubResource("SphereMesh_nak1q")
-script = ExtResource("6_trha7")
+script = ExtResource("4_3llcq")
 radius = 2.0
 color = Color(1, 0.00784314, 0.0588235, 1)
 reflection_type = 0
@@ -104,7 +104,7 @@ reflection_type = 0
 transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, -15.9609, -18.101, -32.2941)
 top_level = true
 mesh = SubResource("SphereMesh_fx4ml")
-script = ExtResource("6_trha7")
+script = ExtResource("4_3llcq")
 radius = 30.0
 color = Color(0.560784, 1, 0.568627, 1)
 reflection_type = 0
@@ -113,7 +113,7 @@ reflection_type = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.242, 1, -2.005)
 top_level = true
 mesh = SubResource("SphereMesh_28jwi")
-script = ExtResource("6_trha7")
+script = ExtResource("4_3llcq")
 radius = 1.0
 color = Color(1, 1, 1, 1)
 reflection_type = 1
@@ -122,7 +122,7 @@ reflection_type = 1
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.183556, 1, -6.95439)
 top_level = true
 mesh = SubResource("SphereMesh_28jwi")
-script = ExtResource("6_trha7")
+script = ExtResource("4_3llcq")
 radius = 0.7
 color = Color(0.647059, 0, 1, 1)
 reflection_type = 1
@@ -131,7 +131,7 @@ reflection_type = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.49441, 1.035, -7.13578)
 top_level = true
 mesh = SubResource("SphereMesh_fx4ml")
-script = ExtResource("6_trha7")
+script = ExtResource("4_3llcq")
 radius = 1.0
 color = Color(1, 0.929412, 0, 1)
 reflection_type = 2
@@ -140,7 +140,7 @@ reflection_type = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49559, 1.035, -0.18135)
 top_level = true
 mesh = SubResource("SphereMesh_fx4ml")
-script = ExtResource("6_trha7")
+script = ExtResource("4_3llcq")
 radius = 1.0
 color = Color(1, 1, 1, 1)
 reflection_type = 2
@@ -149,7 +149,7 @@ reflection_type = 2
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.0244753, 2.32416, 5.10291)
 top_level = true
 mesh = SubResource("SphereMesh_fx4ml")
-script = ExtResource("6_trha7")
+script = ExtResource("4_3llcq")
 radius = 1.5
 color = Color(1, 1, 1, 1)
 reflection_type = 2
@@ -157,7 +157,7 @@ reflection_type = 2
 [node name="Lite" type="MeshInstance3D" parent="Scene"]
 top_level = true
 mesh = SubResource("SphereMesh_ipv1x")
-script = ExtResource("6_trha7")
+script = ExtResource("4_3llcq")
 radius = 100.0
 color = Color(0.106, 0.332133, 0.53, 1)
 emission = Color(1, 1, 1, 1)

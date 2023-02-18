@@ -1,5 +1,5 @@
-extends Sphere
-class_name Plane
+extends Primitive
+class_name PlanePrimitive
 
 class PlaneStruct:
 	var pos: Vector3
@@ -14,7 +14,7 @@ class PlaneStruct:
 var plane: PlaneStruct
 
 func _ready() -> void:
-	SceneCollector.add_sphere(self)
+	SceneCollector.add_prim(self)
 
 
 func update_data() -> void:
@@ -29,7 +29,7 @@ func update_data() -> void:
 func get_data() -> PackedByteArray:
 	update_data()
 	var pba = PackedByteArray()
-	pba.append_array(PBATools.encode_float_x4(ObjectType.Plane))
+	pba.append_array(PBATools.encode_float_x4(PrimitiveType.Plane))
 	pba.append_array(PBATools.encode_vec3(plane.pos))
 	pba.append_array(PBATools.encode_vec3(plane.norm))
 	pba.append_array(PBATools.encode_color(plane.clr))
@@ -39,4 +39,4 @@ func get_data() -> PackedByteArray:
 
 
 func _exit_tree() -> void:
-	SceneCollector.remove_sphere(self)
+	SceneCollector.remove_prim(self)
