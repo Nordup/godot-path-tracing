@@ -11,8 +11,8 @@ func _init(r_device: RenderingDevice, image_size: Vector2i, data: PackedByteArra
 	fmt.height = image_size.y
 	fmt.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
 	fmt.usage_bits = \
-		RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | \
 		RenderingDevice.TEXTURE_USAGE_STORAGE_BIT | \
+		RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | \
 		RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
 	var view := RDTextureView.new()
 	
