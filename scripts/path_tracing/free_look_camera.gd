@@ -17,11 +17,16 @@ func _input(event):
 
 func _process(_delta):
 	if Input.is_action_pressed("RMB"):
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	else:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	
 	_move()
+
+
+func set_mouse_mode(mode : Input.MouseMode) -> void:
+	if Input.mouse_mode != mode:
+		Input.set_mouse_mode(mode)
 
 
 func _move():
